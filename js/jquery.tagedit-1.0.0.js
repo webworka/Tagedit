@@ -389,9 +389,14 @@
                         url: autocompleteURL,
                         dataType: 'json',
                         complete: function(XMLHttpRequest, textStatus) {
-                            var result = $.parseJSON(XMLHttpRequest.responseText);
-                            // If there is an entry for that already in the autocomplete, don't use it
-                            isNew = result.length == 0;
+                                var result = $.parseJSON(XMLHttpRequest.responseText);
+                                // If there is an entry for that already in the autocomplete, don't use it
+                                for(var i = 0; i < result.length; i++) {
+                                    if(result[i].label == value) {
+                                        isNew = false;
+                                        break;
+                                    }
+                                }
                             }
                 });
             }
