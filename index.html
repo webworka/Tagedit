@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<head>
+    <title>jQuery Plugin tagedit - Tageditor</title>
+    
+    <meta name="generator" content="Komodo IDE"  />
+    <meta name="author" content="Oliver Albrecht" />
+    <meta name="description" content="Example Page for the jQuery Plugin tagedit. It offers an inputfield for adding, editing und deleting keywords, tags and other lists. There is also autocompletion" />
+    <meta name="robots" content="index, follow" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <meta http-equiv="content-language" content="de"/>
+    <meta name="language" content="de"/>
+        
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <link rel="StyleSheet" href="css/ui-lightness/jquery-ui-1.8.6.custom.css" type="text/css" media="all"/>
+    <link rel="StyleSheet" href="css/jquery.tagedit-1.0.0.css" type="text/css" media="all"/>
+    
+    <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.6.custom.min.js"></script>
+	<script type="text/javascript" src="js/jquery.autoGrowInput.js"></script>
+    <script type="text/javascript" src="js/jquery.tagedit-1.0.0.js"></script>
+    
+    <script type="text/javascript">
+	$(function() {
+		
+		// Fullexample
+		$( "#tagform-full" ).find('input.tag').tagedit({
+			autocompleteURL: 'server/autocomplete.php',
+		});
+		
+		// Edit only
+		$( "#tagform-editonly" ).find('input.tag').tagedit({
+			autocompleteURL: 'server/autocomplete.php',
+			allowEdit: false,
+			allowAdd: false,
+		});
+	});
+	</script>
+    
+    </head>
+<body>
+    <h1>jQuery Plugin Tagedit</h1>
+    <p>
+        The jQuery Plugin <strong>tagedit</strong> by <a href="http://webwork-albrecht.de" title="visit my homepage">Oliver Albrecht</a> offers an easy way to add, edit and delete lists of keywords.<br/>
+		Keywords can be brought to the user with a autocomplete list.<br/><br/>
+		This plugin was inspired by the <a href="http://levycarneiro.com/projects/tag-it/example.html">jQuery Plugin Tag it!</a> created by <a href="http://levycarneiro.com/">Levy Carneiro Jr</a>.
+    </p>
+	<h2>Dependencies</h2>
+	<ul>
+		<li><a href="http://jquery.com">jQuery 1.4.x</a></li>
+		<li><a href="http://jqueryui.com">jQuery UI 1.8.x</a></li>
+		<li><a href="http://jsbin.com/ahaxe">autoGrowInput</a> by <a href="http://james.padolsey.com">James Padolsey</a></li>
+	</ul>
+	
+	<h2>Try out a demonstration</h2>
+	
+	<h3>Full example</h3>
+    <form action="server/formtarget.php" method="post" id="tagform-full" target="_blank">
+		<p>
+			<input type="text" name="tag[19]" value="Merlin" class="tag"/>
+			<input type="text" name="tag[15-d]" value="Little Owl" class="tag"/>
+        
+			<input type="submit" name="save" value="Save"/>
+		</p>
+    </form>
+	
+	<h3>Add only - restricted on Autocomplete List</h3>
+    <form action="server/formtarget.php" method="post" id="tagform-editonly" target="_blank">
+		<p>
+			<input type="text" name="tag[3]" value="Hazel Grouse" class="tag" />
+        
+			<input type="submit" name="save" value="Save"/>
+		</p>
+    </form>
+	
+	<p class="footer">
+		<a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.<br/>
+		&copy; 2010 Oliver Albrecht - <a href="http://webwork-albrecht.de">webwork-albrecht.de</a>
+	</p>
+</body>
+</html>
