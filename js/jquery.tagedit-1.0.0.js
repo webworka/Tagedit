@@ -11,7 +11,7 @@
  * http://creativecommons.org/licenses/by/3.0/
  *
  * @author Oliver Albrecht Mial: info@webwork-albrecht.de Twitter: @webworka
- * @version 1.0.0 (05/2011)
+ * @version 1.0.1 (05/2011)
  * Requires: jQuery v1.4+, jQueryUI v1.8+, jQuerry.autoGrowInput
  *
  * Example of usage:
