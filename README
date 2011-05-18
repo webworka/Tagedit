@@ -1,7 +1,10 @@
 Tagedit - jQuery Plugin
 The Plugin can be used to edit tags from a database the easy way
 
-Examples and documentation at: tagedit.webwork-albrecht.de
+Examples, code and documentation:
+http://tagedit.webwork-albrecht.de
+http://www.youtube.com/watch?v=TU_FdBlSPNc
+https://github.com/webworka/Tagedit
   
 Copyright (c) 2010 Oliver Albrecht info@webwork-albrecht.de 
  
@@ -9,8 +12,11 @@ License:
 This work is licensed under a Creative Commons Attribution 3.0 Unported License.
 http://creativecommons.org/licenses/by/3.0/
  
-Author Oliver Albrecht Mial: info@webwork-albrecht.de Twitter: @webworka
-Version 1.0.1 (05/2011)
+Author:
+Oliver Albrecht Mial: info@webwork-albrecht.de Twitter: @webworka
+
+Version:
+1.0.1 (05/2011)
 
 
 ------ Changelog ---------
