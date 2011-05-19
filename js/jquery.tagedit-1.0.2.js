@@ -11,7 +11,7 @@
  * http://creativecommons.org/licenses/by/3.0/
  *
  * @author Oliver Albrecht Mial: info@webwork-albrecht.de Twitter: @webworka
- * @version 1.0.1 (05/2011)
+ * @version 1.0.2 (05/2011)
  * Requires: jQuery v1.4+, jQueryUI v1.8+, jQuerry.autoGrowInput
  *
  * Example of usage:
@@ -103,7 +103,7 @@
                 var element_name = $(this).attr('name').match(baseNameRegexp);
                 if(element_name && element_name.length == 4 && (options.deleteEmptyItems == false || $(this).val().length > 0)) {
                     if(element_name[1].length > 0) {
-                        var elementId = typeof element_name[3] != 'undefined'? element_name[2]: '';
+                        var elementId = typeof element_name[2] != 'undefined'? element_name[2]: '';
                         
                         html += '<li class="tagedit-listelement tagedit-listelement-old">';
                         html += '<span dir="'+options.direction+'">' + $(this).val() + '</span>';

@@ -16,10 +16,13 @@ Author:
 Oliver Albrecht Mial: info@webwork-albrecht.de Twitter: @webworka
 
 Version:
-1.0.1 (05/2011)
+1.0.2 (05/2011)
 
 
 ------ Changelog ---------
+
+v1.0.2 - 19.05.2011
+- Bugfix for cases if there are already Elements from database befor initialising the Plugin
 
 v1.0.1 - 18.05.2011
 - Bugfix for adding elements that are already inside the autocompletion list
