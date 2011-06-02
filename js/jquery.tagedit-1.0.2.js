@@ -77,7 +77,7 @@
         
         var elements = this;
         
-        var baseNameRegexp = new RegExp("^([a-z0-9_]*)\\[([0-9]*?("+options.deletedPostfix+"|"+options.addedPostfix+")?)?\]$", "i");
+        var baseNameRegexp = new RegExp("^(.*)\\[([0-9]*?("+options.deletedPostfix+"|"+options.addedPostfix+")?)?\]$", "i");
         
         var baseName = elements.eq(0).attr('name').match(baseNameRegexp);
         if(baseName && baseName.length == 4) {
