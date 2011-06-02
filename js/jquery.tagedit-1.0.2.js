@@ -88,10 +88,11 @@
 
 			if (elements.length) {
 
-				var baseName = elements.eq(0).attr('name').match(baseNameRegexp);
+				baseName = elements.eq(0).attr('name').match(baseNameRegexp);
+				
 				if(baseName && baseName.length == 4) {
 					baseName = baseName[1];
-				}	else {
+				} else {
 					// Elementname does not match the expected format, exit
 					alert('elementname dows not match the expected format (regexp: '+baseNameRegexp+')')
 					return;
@@ -267,7 +268,7 @@
 								.focus();
 					}
 					return false;
-				})
+				});
 		}
 		
 		/**
