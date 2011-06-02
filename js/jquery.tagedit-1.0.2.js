@@ -81,11 +81,10 @@
 		var container = $(this);
 		var elements = container.find(options.inputSelector);
 		var baseName = options.baseName;
+                var baseNameRegexp = new RegExp("^(.*)\\[([0-9]*?("+options.deletedPostfix+"|"+options.addedPostfix+")?)?\]$", "i");
 		
 		if (baseName === null) {
 			
-			var baseNameRegexp = new RegExp("^(.*)\\[([0-9]*?("+options.deletedPostfix+"|"+options.addedPostfix+")?)?\]$", "i");
-
 			if (elements.length) {
 
 				baseName = elements.eq(0).attr('name').match(baseNameRegexp);
