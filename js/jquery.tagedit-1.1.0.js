@@ -47,9 +47,9 @@
         /**
          * Merge Options with defaults
          */ 
-        options = $.extend({
+        options = $.extend(true, {
             // default options here
-            autocompleteURL: '',
+            autocompleteURL: null,
             deletedPostfix: '-d',
             addedPostfix: '-a',
             additionalListClass: '',
@@ -57,7 +57,12 @@
             allowDelete: true,
             allowAdd: true,
             direction: 'ltr',
-            autocompleteOptions: {},
+            autocompleteOptions: {
+				select: function( event, ui ) {
+					$(this).val(ui.item.value).trigger('transformToTag', [ui.item.id]);
+					return false;
+				}
+			},
             breakKeyCodes: [ 13, 44 ],
             texts: {
                 removeLinkTitle: 'Remove from list.',
@@ -74,6 +79,10 @@
             return;
         }
         
+		// set the autocompleteOptions source
+		if(options.autocompleteURL) 
+			options.autocompleteOptions = $.extend({ source: options.autocompleteURL}, options.autocompleteOptions);
+		
         // Set the direction of the inputs
         if(this.attr('dir').length > 0) {
             options.direction = this.attr('dir');
@@ -174,7 +183,7 @@
                             $(this).val('');
                             
                             // close autocomplete
-                            if(options.autocompleteURL != false) {
+                            if(options.autocompleteOptions.source) {
                                 $(this).autocomplete( "close" );
                             }
     
@@ -228,16 +237,8 @@
                             window.clearTimeout($(this).data('blurtimer'));
                         });
                         
-                        if(options.autocompleteURL != false) {
-                            var autocompleteOptions = $.extend({
-                                source: options.autocompleteURL,
-                                select: function( event, ui ) {
-                                    $(this).val(ui.item.value).trigger('transformToTag', [ui.item.id]);
-									return false;
-                                }
-                            }, options.autocompleteOptions || {});
-                            
-                            $(this).autocomplete(autocompleteOptions);
+                        if(options.autocompleteOptions.source != false) {                           
+                            $(this).autocomplete(options.autocompleteOptions);
                         }
                     })
                 .end()
@@ -386,32 +387,41 @@
                 }
             });
             
-            if(isNew == true && checkAutocomplete == true && options.autocompleteURL != false) {
-                // Check also autocomplete values
-                var autocompleteURL = options.autocompleteURL;
-                if(autocompleteURL.match(/\?/)) {
-                    autocompleteURL += '&';
-                }
-                else {
-                    autocompleteURL += '?';
-                }
-                autocompleteURL += 'term=' + value;
-                $.ajax({async: false,
-                        url: autocompleteURL,
-                        dataType: 'json',
-                        complete: function(XMLHttpRequest, textStatus) {
-                                var result = $.parseJSON(XMLHttpRequest.responseText);
-                                // If there is an entry for that already in the autocomplete, don't use it
-                                for(var i = 0; i < result.length; i++) {
-                                    if(result[i].label == value) {
-                                        isNew = false;
-                                        autoCompleteId = result[i].id;
-                                        break;
-                                    }
-                                }
-                            }
-                });
-            }
+			if (isNew == true && checkAutocomplete == true && options.autocompleteOptions.source != false) {
+				var result = [];
+				if ($.isArray(options.autocompleteOptions.source)) {
+					result = options.autocompleteOptions.source;
+				} else if ($.isFunction(options.autocompleteOptions.source)) {
+					result = options.autocompleteOptions.source.apply({
+						term: value
+					});
+				} else if (typeof options.autocompleteOptions.source === "string") {
+					// Check also autocomplete values
+					var autocompleteURL = options.autocompleteOptions.source;
+					if (autocompleteURL.match(/\?/)) {
+						autocompleteURL += '&';
+					} else {
+						autocompleteURL += '?';
+					}
+					autocompleteURL += 'term=' + value;
+					$.ajax({
+						async: false,
+						url: autocompleteURL,
+						dataType: 'json',
+						complete: function (XMLHttpRequest, textStatus) {
+							var result = $.parseJSON(XMLHttpRequest.responseText);
+						}
+					});
+				}
+				// If there is an entry for that already in the autocomplete, don't use it
+				for (var i = 0; i < result.length; i++) {
+					if (result[i].label == value) {
+						isNew = false;
+						autoCompleteId = result[i].id;
+						break;
+					}
+				}
+			}
 
             return new Array(isNew, autoCompleteId);
         }
