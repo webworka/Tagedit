@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<head>
+    <title>jQuery Plugin tagedit - Playground</title>
+    
+    <meta name="generator" content="Komodo IDE"  />
+    <meta name="author" content="Oliver Albrecht" />
+    <meta name="description" content="Example Page for the jQuery Plugin tagedit. List of usecases and tests" />
+    <meta name="robots" content="index, follow" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <meta http-equiv="content-language" content="de"/>
+    <meta name="language" content="de"/>
+        
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <link rel="StyleSheet" href="css/ui-lightness/jquery-ui-1.8.6.custom.css" type="text/css" media="all"/>
+    <link rel="StyleSheet" href="css/jquery.tagedit.css" type="text/css" media="all"/>
+    
+    <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.6.custom.min.js"></script>
+	<script type="text/javascript" src="js/jquery.autoGrowInput.js"></script>
+    <script type="text/javascript" src="js/jquery.tagedit-1.1.0.js"></script>
+    
+    <script type="text/javascript">
+	$(function() {
+		
+		// Empty List
+		$( '#empty-list input.tag' ).tagedit({
+			autocompleteURL: 'server/autocomplete.php'
+		});
+		
+		// Edit only
+		$( '#brackets input.tag').tagedit({
+			autocompleteURL: 'server/autocomplete.php'
+		});
+		
+		// Empty List
+		$( '#arrow input.tag' ).tagedit({
+			autocompleteURL: 'server/autocomplete.php',
+			autocompleteOptions: {minLength: 0}
+		});
+	});
+	</script>
+    
+    </head>
+<body>
+    <h1>jQuery Plugin Tagedit - Playground</h1>
+	<p>
+		Some more example of different use cases.
+	</p>
+	
+	<h2>Starting with an empty list</h2>
+    <form action="server/formtarget.php" method="post" id="empty-list">
+		<p>
+			<input type="text" name="tag[]" value="" class="tag"/>
+			<input type="submit" name="save" value="Save"/>
+		</p>
+    </form>
+	
+	<h2>Use square brackets in tht inputname</h2>
+    <form action="server/formtarget.php" method="post" id="brackets">
+		<p>
+			<input type="text" name="formdata[tags][3-a]" value="Hazel Grouse" class="tag" />
+			<input type="text" name="formdata[tags][7-a]" value="Greylag Goose" class="tag" />
+			<input type="submit" name="save" value="Save"/>
+		</p>
+    </form>
+	
+	<h2>Use Arrow-Down for showing the complete Autocompleterlist</h2>
+    <form action="server/formtarget.php" method="post" id="arrow">
+		<p>
+			<input type="text" name="tag[]" value="" class="tag"/>
+			<input type="submit" name="save" value="Save"/>
+		</p>
+    </form>
+	
+	<p class="footer">
+		<a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.<br/>
+		&copy; 2010 Oliver Albrecht - <a href="http://webwork-albrecht.de">webwork-albrecht.de</a>
+	</p>
+</body>
+</html>

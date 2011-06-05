@@ -12,19 +12,23 @@
  */
 
 //echo '<pre>' . print_r($_POST['tag'], true) . '</pre>';exit;
-
-if(array_key_exists('save', $_POST) && array_key_exists('tag', $_POST)) {
+$showResult = false;
+if(array_key_exists('save', $_POST) && (array_key_exists('tag', $_POST) || array_key_exists('formdata', $_POST))) {
     // Include the autocompleteScript to know what was in the database
     include ('autocomplete.php');
     
     $result = array('new' => array(), 'deleted' => array(), 'changed' => array(), 'not changed' => array());
-    foreach($_POST['tag'] as $key => $value) {
+    $tags = array_key_exists('tag', $_POST)? $_POST['tag'] : $_POST['formdata']['tags'];
+    $showResult = false;
+    
+    foreach($tags as $key => $value) {
         if(preg_match('/([0-9]*)-?(a|d)?$/', $key, $keyparts) === 1) {
+            $showResult = true;
             if(isset($keyparts[2])) {
                 switch($keyparts[2]) {
                     case 'a':
                         if($autocompletiondata[$keyparts[1]] != $value) {
-                                // Items has changed
+                            // Items has changed
                             $result['changed'][] = $keyparts[1] . ' (new value: "' . $value . '")';
                         }
                         else {
@@ -64,8 +68,8 @@ if(array_key_exists('save', $_POST) && array_key_exists('tag', $_POST)) {
     </head>
 <body>
 <h1>Tagedit result</h1>
-<a href="../index.html" title="Back">Back to inputpage</a>
-<?php if(array_key_exists('save', $_POST) && array_key_exists('tag', $_POST) && count($_POST['tag']) > 0) :?>
+<a href="javascript:history.back()" title="Back">Back to inputpage</a>
+<?php if($showResult) :?>
     <p>The following inputs where received:</p>
     <?php foreach($result as $key => $results) : ?>
         <h2>Tags that are <?php echo $key; ?></h2>

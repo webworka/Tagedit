@@ -13,13 +13,22 @@ This work is licensed under a Creative Commons Attribution 3.0 Unported License.
 http://creativecommons.org/licenses/by/3.0/
  
 Author:
-Oliver Albrecht Mial: info@webwork-albrecht.de Twitter: @webworka
+Oliver Albrecht - Mail: info@webwork-albrecht.de Twitter: @webworka
 
 Version:
-1.0.2 (05/2011)
+1.1.0 (06/2011)
 
 
 ------ Changelog ---------
+
+v1.1.0 - 05.06.2011
+- Bugfix: Putting an item that is inside the autocompletionlist was not possible without clicking on the item (issue #2) thanks to mmezzacca
+- Change: Make the Regexp for the name of the items less restrictable (issue #4 and #5) thanks to jdart
+- Change: removed the versionstring from the css file
+- Extension: Putting the jQuery ui autocompletion options to the tagedit options. Therfore its possible to view the complete list of items (partly issue #1)
+- Minor: Added another example page
+- Minor: removing some german comments
+- Minor: adding some comments for events
 
 v1.0.2 - 19.05.2011
 - Bugfix for cases if there are already Elements from database befor initialising the Plugin
