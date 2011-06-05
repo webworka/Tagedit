@@ -30,6 +30,7 @@
  *  allowAdd: true, // switch on/off the creation of new entries
  *  direction: 'ltr' // Sets the writing direction for Outputs and Inputs
  *  autocompleteOptions: {}, // Setting Options for the jquery UI Autocomplete (http://jqueryui.com/demos/autocomplete/)
+ *  breakKeyCodes: [ 13, 44 ], // Sets the characters to break on to parse the tags (defaults: return, comma)
  *  texts: { // some texts
  *      removeLinkTitle: 'Remove from list.',
  *      saveEditLinkTitle: 'Save changes.',
@@ -57,6 +58,7 @@
             allowAdd: true,
             direction: 'ltr',
             autocompleteOptions: {},
+			breakKeyCodes: [ 13, 44 ],
             texts: {
                 removeLinkTitle: 'Remove from list.',
                 saveEditLinkTitle: 'Save changes.',
@@ -189,28 +191,25 @@
                                         event.preventDefault();
                                         return false;
                                     }
-                                    break;
-                                case 9: // TAB
-                                    if($(this).val().length > 0 && $('ul.ui-autocomplete #ui-active-menuitem').length == 0) {
-                                        $(this).trigger('transformToTag');
-                                        event.preventDefault();
-                                        return false;
-                                    }
-                                    break;
+                                    break;								
+								case 9: // TAB
+									if($(this).val().length > 0 && $('ul.ui-autocomplete #ui-active-menuitem').length == 0) {
+										$(this).trigger('transformToTag');
+										event.preventDefault();
+										return false;
+									}
+									break;									
                             }
                             return true;
                         })
                         .keypress(function(event) {
                             var code = event.keyCode > 0? event.keyCode : event.which;
-                     
-                            switch(code) {
-                                case 44: // ,
-                                case 13: // RETURN
-                                    if($(this).val().length > 0 && $('ul.ui-autocomplete #ui-active-menuitem').length == 0) {
-                                        $(this).trigger('transformToTag');
-                                    }
-                                    event.preventDefault();
-                                    return false;
+							if($.inArray(code, options.breakKeyCodes) > -1) {
+								if($(this).val().length > 0 && $('ul.ui-autocomplete #ui-active-menuitem').length == 0) {
+									$(this).trigger('transformToTag');
+								}
+								event.preventDefault();
+								return false;
                             }
                             return true;
                         })
@@ -233,9 +232,9 @@
                             var autocompleteOptions = $.extend({
                                 source: options.autocompleteURL,
                                 select: function( event, ui ) {
-                                        $(this).val(ui.item.value).trigger('transformToTag', [ui.item.id]);
-                                        return false;
-                                    }
+                                    $(this).val(ui.item.value).trigger('transformToTag', [ui.item.id]);
+									return false;
+                                }
                             }, options.autocompleteOptions || {});
                             
                             $(this).autocomplete(autocompleteOptions);
@@ -377,7 +376,7 @@
          * @returns {Array} First item is a boolean, telling if the item should be put to the list, second is optional the ID from autocomplete list
          */ 
         function isNew(value, checkAutocomplete) {
-            checkAutocomplete = typeof checkAutocomplete == 'undefined'? false : checkAutocomplete;
+           checkAutocomplete = typeof checkAutocomplete == 'undefined'? false : checkAutocomplete;
             var autoCompleteId = null;
             
             var isNew = true;

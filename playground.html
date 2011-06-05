@@ -22,8 +22,7 @@
     <script type="text/javascript" src="js/jquery.tagedit-1.1.0.js"></script>
     
     <script type="text/javascript">
-	$(function() {
-		
+	$(function() {	
 		// Empty List
 		$( '#empty-list input.tag' ).tagedit({
 			autocompleteURL: 'server/autocomplete.php'
@@ -34,10 +33,17 @@
 			autocompleteURL: 'server/autocomplete.php'
 		});
 		
-		// Empty List
+		// Arrow List
 		$( '#arrow input.tag' ).tagedit({
 			autocompleteURL: 'server/autocomplete.php',
 			autocompleteOptions: {minLength: 0}
+		});
+		
+		// Custom Break Characters
+		$('#custom-break input.tag').tagedit({
+			autocompleteURL: 'server/autocomplete.php',
+			// return, comma, space, period, semicolon
+			breakKeyCodes: [ 13, 44, 32, 46, 59 ]
 		});
 	});
 	</script>
@@ -68,6 +74,14 @@
 	
 	<h2>Use Arrow-Down for showing the complete Autocompleterlist</h2>
     <form action="server/formtarget.php" method="post" id="arrow">
+		<p>
+			<input type="text" name="tag[]" value="" class="tag"/>
+			<input type="submit" name="save" value="Save"/>
+		</p>
+    </form>
+	
+	<h2>Use custom break characters</h2>
+    <form action="server/formtarget.php" method="post" id="custom-break">
 		<p>
 			<input type="text" name="tag[]" value="" class="tag"/>
 			<input type="submit" name="save" value="Save"/>
