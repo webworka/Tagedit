@@ -58,7 +58,7 @@
             allowAdd: true,
             direction: 'ltr',
             autocompleteOptions: {},
-			breakKeyCodes: [ 13, 44 ],
+            breakKeyCodes: [ 13, 44 ],
             texts: {
                 removeLinkTitle: 'Remove from list.',
                 saveEditLinkTitle: 'Save changes.',
@@ -192,24 +192,24 @@
                                         return false;
                                     }
                                     break;								
-								case 9: // TAB
-									if($(this).val().length > 0 && $('ul.ui-autocomplete #ui-active-menuitem').length == 0) {
-										$(this).trigger('transformToTag');
-										event.preventDefault();
-										return false;
-									}
-									break;									
+				case 9: // TAB
+					if($(this).val().length > 0 && $('ul.ui-autocomplete #ui-active-menuitem').length == 0) {
+						$(this).trigger('transformToTag');
+						event.preventDefault();
+						return false;
+					}
+					break;									
                             }
                             return true;
                         })
                         .keypress(function(event) {
-                            var code = event.keyCode > 0? event.keyCode : event.which;
-							if($.inArray(code, options.breakKeyCodes) > -1) {
-								if($(this).val().length > 0 && $('ul.ui-autocomplete #ui-active-menuitem').length == 0) {
-									$(this).trigger('transformToTag');
-								}
-								event.preventDefault();
-								return false;
+				var code = event.keyCode > 0? event.keyCode : event.which;
+				if($.inArray(code, options.breakKeyCodes) > -1) {
+					if($(this).val().length > 0 && $('ul.ui-autocomplete #ui-active-menuitem').length == 0) {
+						$(this).trigger('transformToTag');
+					}
+					event.preventDefault();
+					return false;
                             }
                             return true;
                         })
