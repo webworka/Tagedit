@@ -80,8 +80,9 @@
         }
         
 		// set the autocompleteOptions source
-		if(options.autocompleteURL) 
-			options.autocompleteOptions = $.extend({ source: options.autocompleteURL}, options.autocompleteOptions);
+		if(options.autocompleteURL) {
+			options.autocompleteOptions.source = options.autocompleteURL;
+		}
 		
         // Set the direction of the inputs
         if(this.attr('dir').length > 0) {

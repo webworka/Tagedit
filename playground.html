@@ -53,18 +53,22 @@
 			{ "id": "3", "label": "Greylag Goose", "value": "Greylag Goose" }
 		];				
 		$('#local-source input.tag').tagedit({
-			autocompleteURL: localJSON
+			autocompleteOptions: {
+				source: localJSON
+			}
 		});
 		
 		// Function Source
 		$('#function-source input.tag').tagedit({
-			autocompleteURL: function(request, response){
-				var data = [
-					{ "id": "1", "label": "Hazel Grouse", "value": "Hazel Grouse" },
-					{ "id": "2", "label": "Common Quail",	"value": "Common Quail" },
-					{ "id": "3", "label": "Greylag Goose", "value": "Greylag Goose" }
-				];				
-				return response($.ui.autocomplete.filter(data, request.term) );
+			autocompleteOptions: {
+				source: function(request, response){
+					var data = [
+						{ "id": "1", "label": "Hazel Grouse", "value": "Hazel Grouse" },
+						{ "id": "2", "label": "Common Quail",	"value": "Common Quail" },
+						{ "id": "3", "label": "Greylag Goose", "value": "Greylag Goose" }
+					];				
+					return response($.ui.autocomplete.filter(data, request.term) );
+				}
 			}
 		});	
 	});
