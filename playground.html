@@ -18,12 +18,11 @@
     
     <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.8.6.custom.min.js"></script>
-	<script type="text/javascript" src="js/jquery.autoGrowInput.js"></script>
+    <script type="text/javascript" src="js/jquery.autoGrowInput.js"></script>
     <script type="text/javascript" src="js/jquery.tagedit-1.1.0.js"></script>
     
     <script type="text/javascript">
-	$(function() {
-		
+	$(function() {	
 		// Empty List
 		$( '#empty-list input.tag' ).tagedit({
 			autocompleteURL: 'server/autocomplete.php'
@@ -34,11 +33,44 @@
 			autocompleteURL: 'server/autocomplete.php'
 		});
 		
-		// Empty List
+		// Arrow List
 		$( '#arrow input.tag' ).tagedit({
 			autocompleteURL: 'server/autocomplete.php',
 			autocompleteOptions: {minLength: 0}
 		});
+		
+		// Custom Break Characters
+		$('#custom-break input.tag').tagedit({
+			autocompleteURL: 'server/autocomplete.php',
+			// return, comma, space, period, semicolon
+			breakKeyCodes: [ 13, 44, 32, 46, 59 ]
+		});
+		
+		// Local Source
+		var localJSON = [
+			{ "id": "1", "label": "Hazel Grouse", "value": "Hazel Grouse" },
+			{ "id": "2", "label": "Common Quail",	"value": "Common Quail" },
+			{ "id": "3", "label": "Greylag Goose", "value": "Greylag Goose" }
+		];				
+		$('#local-source input.tag').tagedit({
+			autocompleteOptions: {
+				source: localJSON
+			}
+		});
+		
+		// Function Source
+		$('#function-source input.tag').tagedit({
+			autocompleteOptions: {
+				source: function(request, response){
+					var data = [
+						{ "id": "1", "label": "Hazel Grouse", "value": "Hazel Grouse" },
+						{ "id": "2", "label": "Common Quail",	"value": "Common Quail" },
+						{ "id": "3", "label": "Greylag Goose", "value": "Greylag Goose" }
+					];				
+					return response($.ui.autocomplete.filter(data, request.term) );
+				}
+			}
+		});	
 	});
 	</script>
     
@@ -68,6 +100,30 @@
 	
 	<h2>Use Arrow-Down for showing the complete Autocompleterlist</h2>
     <form action="server/formtarget.php" method="post" id="arrow">
+		<p>
+			<input type="text" name="tag[]" value="" class="tag"/>
+			<input type="submit" name="save" value="Save"/>
+		</p>
+    </form>
+
+	<h2>Use custom break characters</h2>
+    <form action="server/formtarget.php" method="post" id="custom-break">
+		<p>
+			<input type="text" name="tag[]" value="" class="tag"/>
+			<input type="submit" name="save" value="Save"/>
+		</p>
+    </form>
+	
+	<h2>Use local source for autocomplete list</h2>
+    <form action="server/formtarget.php" method="post" id="local-source">
+		<p>
+			<input type="text" name="tag[]" value="" class="tag"/>
+			<input type="submit" name="save" value="Save"/>
+		</p>
+    </form>
+	
+	<h2>Use function source for autocomplete list</h2>
+    <form action="server/formtarget.php" method="post" id="function-source">
 		<p>
 			<input type="text" name="tag[]" value="" class="tag"/>
 			<input type="submit" name="save" value="Save"/>
