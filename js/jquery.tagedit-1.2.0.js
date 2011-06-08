@@ -200,6 +200,7 @@
 										// delete Last Tag
 										var elementToRemove = elements.find('li.tagedit-listelement-old').last();
 										elementToRemove.fadeOut(500, function() {elementToRemove.remove();})
+										$( this ).trigger( "tagRemoved" );
 										event.preventDefault();
 										return false;
 									}
@@ -258,6 +259,7 @@
 						case 'A':
 							$(event.target).parent().fadeOut(500, function() {
 								$(event.target).parent().remove();
+								$( this ).trigger( "tagRemoved" );
 								});
 							break;
 						case 'INPUT':
@@ -305,6 +307,7 @@
 
 				textfield.remove();
 				$(this).find('a.tagedit-save, a.tagedit-break, a.tagedit-delete, tester').remove(); // Workaround. This normaly has to be done by autogrow Plugin
+				$( this ).trigger( "tagRemoved" );
 				$(this).removeClass('tagedit-listelement-edit').unbind('finishEdit');
 				return false;
 			});
