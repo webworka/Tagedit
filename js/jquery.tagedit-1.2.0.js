@@ -243,7 +243,7 @@
 							else {
 								// Delete entry after a timeout
 								var input = $(this);
-								$(this).data('blurtimer', window.setTimeout(function() {input.val('');}, options.animSpeed));
+								$(this).data('blurtimer', window.setTimeout(function() {input.val('');}, 500));
 							}
 						})
 						.focus(function() {
@@ -363,7 +363,7 @@
 					})
 					.blur(function() {
 						var that = $(this);
-						closeTimer = window.setTimeout(function() {that.parent().trigger('finishEdit', [true])}, options.animSpeed);
+						closeTimer = window.setTimeout(function() {that.parent().trigger('finishEdit', [true])}, 500);
 					});
 		}
 
