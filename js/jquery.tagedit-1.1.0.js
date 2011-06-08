@@ -335,10 +335,13 @@
 				.end()
 				.find('a.tagedit-delete')
 					.click(function() {
+                        window.clearTimeout(closeTimer);
 						if(confirm(options.texts.deleteConfirmation)) {
 							markAsDeleted($(this).parent());
 						}
-						window.clearTimeout(closeTimer);
+                        else {
+                            $(this).parent().find(':text').trigger('finishEdit', [true]);
+                        }
 						return false;
 					})
 				.end()
