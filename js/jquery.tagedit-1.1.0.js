@@ -386,7 +386,7 @@
 		* @returns {Array} First item is a boolean, telling if the item should be put to the list, second is optional the ID from autocomplete list
 		*/
 		function isNew(value, checkAutocomplete) {
-		checkAutocomplete = typeof checkAutocomplete == 'undefined'? false : checkAutocomplete;
+            checkAutocomplete = typeof checkAutocomplete == 'undefined'? false : checkAutocomplete;
 			var autoCompleteId = null;
 
 			var isNew = true;
@@ -400,11 +400,13 @@
 				var result = [];
 				if ($.isArray(options.autocompleteOptions.source)) {
 					result = options.autocompleteOptions.source;
-				} else if ($.isFunction(options.autocompleteOptions.source)) {
+				}
+                else if ($.isFunction(options.autocompleteOptions.source)) {
 					result = options.autocompleteOptions.source.apply({
 						term: value
 					});
-				} else if (typeof options.autocompleteOptions.source === "string") {
+				}
+                else if (typeof options.autocompleteOptions.source === "string") {
 					// Check also autocomplete values
 					var autocompleteURL = options.autocompleteOptions.source;
 					if (autocompleteURL.match(/\?/)) {
@@ -418,10 +420,11 @@
 						url: autocompleteURL,
 						dataType: 'json',
 						complete: function (XMLHttpRequest, textStatus) {
-							var result = $.parseJSON(XMLHttpRequest.responseText);
+							result = $.parseJSON(XMLHttpRequest.responseText);
 						}
 					});
 				}
+                
 				// If there is an entry for that already in the autocomplete, don't use it
 				for (var i = 0; i < result.length; i++) {
 					if (result[i].label == value) {
