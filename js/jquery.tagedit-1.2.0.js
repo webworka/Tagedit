@@ -29,6 +29,7 @@
 *  allowDelete: true, // Switch on/off deletion of entries. Will be ignored if allowEdit = false
 *  allowAdd: true, // switch on/off the creation of new entries
 *  direction: 'ltr' // Sets the writing direction for Outputs and Inputs
+*  animSpeed: 500 // Sets the animation speed for effects
 *  autocompleteOptions: {}, // Setting Options for the jquery UI Autocomplete (http://jqueryui.com/demos/autocomplete/)
 *  breakKeyCodes: [ 13, 44 ], // Sets the characters to break on to parse the tags (defaults: return, comma)
 *  checkNewEntriesCaseSensitive: false, // If there is a new Entry, it is checked against the autocompletion list. This Flag controlls if the check is (in-)casesensitive
