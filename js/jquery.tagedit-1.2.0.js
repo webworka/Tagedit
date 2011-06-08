@@ -58,6 +58,7 @@
 			allowDelete: true,
 			allowAdd: true,
 			direction: 'ltr',
+			animSpeed: 500,
 			autocompleteOptions: {
 				select: function( event, ui ) {
 					$(this).val(ui.item.value).trigger('transformToTag', [ui.item.id]);
@@ -199,7 +200,7 @@
 									if($(this).val().length == 0) {
 										// delete Last Tag
 										var elementToRemove = elements.find('li.tagedit-listelement-old').last();
-										elementToRemove.fadeOut(500, function() {elementToRemove.remove();})
+										elementToRemove.fadeOut(options.animSpeed, function() {elementToRemove.remove();})
 										event.preventDefault();
 										return false;
 									}
@@ -241,7 +242,7 @@
 							else {
 								// Delete entry after a timeout
 								var input = $(this);
-								$(this).data('blurtimer', window.setTimeout(function() {input.val('');}, 500));
+								$(this).data('blurtimer', window.setTimeout(function() {input.val('');}, options.animSpeed));
 							}
 						})
 						.focus(function() {
@@ -256,7 +257,7 @@
 				.click(function(event) {
 					switch(event.target.tagName) {
 						case 'A':
-							$(event.target).parent().fadeOut(500, function() {
+							$(event.target).parent().fadeOut(options.animSpeed, function() {
 								$(event.target).parent().remove();
 								});
 							break;
@@ -361,7 +362,7 @@
 					})
 					.blur(function() {
 						var that = $(this);
-						closeTimer = window.setTimeout(function() {that.parent().trigger('finishEdit', [true])}, 500);
+						closeTimer = window.setTimeout(function() {that.parent().trigger('finishEdit', [true])}, options.animSpeed);
 					});
 		}
 
