@@ -31,6 +31,7 @@
 *  direction: 'ltr' // Sets the writing direction for Outputs and Inputs
 *  autocompleteOptions: {}, // Setting Options for the jquery UI Autocomplete (http://jqueryui.com/demos/autocomplete/)
 *  breakKeyCodes: [ 13, 44 ], // Sets the characters to break on to parse the tags (defaults: return, comma)
+*  checkNewEntriesCaseSensitive: false, // If there is a new Entry, it is checked against the autocompletion list. This Flag controlls if the check is (in-)casesensitive
 *  texts: { // some texts
 *      removeLinkTitle: 'Remove from list.',
 *      saveEditLinkTitle: 'Save changes.',
@@ -64,6 +65,7 @@
 				}
 			},
 			breakKeyCodes: [ 13, 44 ],
+            checkNewEntriesCaseSensitive: false,
 			texts: {
 				removeLinkTitle: 'Remove from list.',
 				saveEditLinkTitle: 'Save changes.',
@@ -391,10 +393,13 @@
 		function isNew(value, checkAutocomplete) {
             checkAutocomplete = typeof checkAutocomplete == 'undefined'? false : checkAutocomplete;
 			var autoCompleteId = null;
+            
+            var compareValue = options.checkNewEntriesCaseSensitive == true? value : value.toLowerCase();
 
 			var isNew = true;
 			elements.find('li.tagedit-listelement-old input:hidden').each(function() {
-				if($(this).val() == value) {
+                var elementValue = options.checkNewEntriesCaseSensitive == true? $(this).val() : $(this).val().toLowerCase();
+				if(elementValue == compareValue) {
 					isNew = false;
 				}
 			});
@@ -426,9 +431,10 @@
 					});
 				}
                 
-				// If there is an entry for that already in the autocomplete, don't use it
+				// If there is an entry for that already in the autocomplete, don't use it (Check could be case sensitive or not)
 				for (var i = 0; i < result.length; i++) {
-					if (result[i].label == value) {
+                    var label = options.checkNewEntriesCaseSensitive == true? result[i].label : result[i].label.toLowerCase();
+					if (label == compareValue) {
 						isNew = false;
 						autoCompleteId = result[i].id;
 						break;
