@@ -87,7 +87,8 @@
 		}
 
 		// Set the direction of the inputs
-		if(this.attr('dir').length > 0) {
+		var direction= this.attr('dir');
+		if(direction && direction.length > 0) {
 			options.direction = this.attr('dir');
 		}
 
