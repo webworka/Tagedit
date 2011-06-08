@@ -405,9 +405,7 @@
 					result = options.autocompleteOptions.source;
 				}
                 else if ($.isFunction(options.autocompleteOptions.source)) {
-					result = options.autocompleteOptions.source.apply({
-						term: value
-					});
+					options.autocompleteOptions.source({term: value}, function (data) {result = data});
 				}
                 else if (typeof options.autocompleteOptions.source === "string") {
 					// Check also autocomplete values
