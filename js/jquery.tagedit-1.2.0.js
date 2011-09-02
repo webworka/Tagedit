@@ -259,6 +259,12 @@
 				.click(function(event) {
 					switch(event.target.tagName) {
 						case 'A':
+							
+							if (options.allowDelete == false) {
+								// Do nothing
+								break;
+							}
+							
 							$(event.target).parent().fadeOut(options.animSpeed, function() {
 								$(event.target).parent().remove();
 								});
