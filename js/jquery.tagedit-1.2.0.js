@@ -127,7 +127,11 @@
 						html += '<li class="tagedit-listelement tagedit-listelement-old">';
 						html += '<span dir="'+options.direction+'">' + $(this).val() + '</span>';
 						html += '<input type="hidden" name="'+baseName+'['+elementId+']" value="'+$(this).val()+'" />';
-						html += '<a class="tagedit-close" title="'+options.texts.removeLinkTitle+'">x</a>';
+										
+						if (options.allowDelete == true) {
+							html += '<a class="tagedit-close" title="' + options.texts.removeLinkTitle + '">x</a>';								
+						}
+						
 						html += '</li>';
 					}
 				}
