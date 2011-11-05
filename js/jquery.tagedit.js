@@ -362,6 +362,10 @@
 								event.preventDefault();
 								$(this).parent().trigger('finishEdit');
 								return false;
+							case 27: // ESC
+								event.preventDefault();
+								$(this).parent().trigger('finishEdit', [true]);
+								return false;
 						}
 						return true;
 					})
