@@ -297,11 +297,14 @@
 
 			var closeTimer = null;
 
+			// Event that is fired if the User finishes the edit of a tag
 			element.bind('finishEdit', function(event, doReset) {
 				window.clearTimeout(closeTimer);
 
 				var textfield = $(this).find(':text');
-				if(textfield.val().length > 0 && (typeof doReset == 'undefined' || doReset === false) && isNew(textfield.val(), true)) {
+				var isNewResult = isNew(textfield.val(), true);
+				if(textfield.val().length > 0 && (typeof doReset == 'undefined' || doReset === false) && (isNewResult[0] == true)) {
+					// This is a new Value and we do not want to do a reset. Set the new value
 					$(this).find(':hidden').val(textfield.val());
 					$(this).find('span').html(textfield.val());
 				}
