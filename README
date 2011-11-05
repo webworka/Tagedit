@@ -16,10 +16,14 @@ Author:
 Oliver Albrecht - Mail: info@webwork-albrecht.de Twitter: @webworka
 
 Version:
-1.2.0 (06/2011)
+1.2.1 (11/2011)
 
 
 ------ Changelog ---------
+
+v1.2.1 - 05.11.2011
+- Bugfix: When editing a tag, there was no check on the existing values (issue #15)
+- Extension: Pressing ESC while editing no does a reset
 
 v1.2.0 - 08.06.2011
 - Extension: Added Support for local data, remote url and function for autocomplete. Thanks to garjitec (issue #9 and #7)
