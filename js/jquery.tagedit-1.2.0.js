@@ -127,7 +127,11 @@
 						html += '<li class="tagedit-listelement tagedit-listelement-old">';
 						html += '<span dir="'+options.direction+'">' + $(this).val() + '</span>';
 						html += '<input type="hidden" name="'+baseName+'['+elementId+']" value="'+$(this).val()+'" />';
-						html += '<a class="tagedit-close" title="'+options.texts.removeLinkTitle+'">x</a>';
+										
+						if (options.allowDelete == true) {
+							html += '<a class="tagedit-close" title="' + options.texts.removeLinkTitle + '">x</a>';								
+						}
+						
 						html += '</li>';
 					}
 				}
@@ -259,6 +263,12 @@
 				.click(function(event) {
 					switch(event.target.tagName) {
 						case 'A':
+							
+							if (options.allowDelete == false) {
+								// Do nothing
+								break;
+							}
+							
 							$(event.target).parent().fadeOut(options.animSpeed, function() {
 								$(event.target).parent().remove();
 								});
