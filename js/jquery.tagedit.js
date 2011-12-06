@@ -52,8 +52,9 @@
 		options = $.extend(true, {
 			// default options here
 			autocompleteURL: null,
-			deletedPostfix: '-d',
-			addedPostfix: '-a',
+			deletedPostfix: '-d',       // obsolet
+			inactivePostfix: '-i',      // inactive
+			addedPostfix: '-a',         // active
 			additionalListClass: '',
 			allowEdit: true,
 			allowDelete: true,
@@ -72,6 +73,8 @@
 				removeLinkTitle: 'Remove from list.',
 				saveEditLinkTitle: 'Save changes.',
 				deleteLinkTitle: 'Delete this tag from database.',
+				inactiveLinkTitle: 'Inactivate this tag.',
+				activeLinkTitle: 'Activate this tag.',
 				deleteConfirmation: 'Are you sure to delete this entry?',
 				deletedElementTitle: 'This Element will be deleted.',
 				breakEditLinkTitle: 'Cancel'
@@ -96,7 +99,7 @@
 
 		var elements = this;
 
-		var baseNameRegexp = new RegExp("^(.*)\\[([0-9]*?("+options.deletedPostfix+"|"+options.addedPostfix+")?)?\]$", "i");
+		var baseNameRegexp = new RegExp("^(.*)\\[([0-9]*?("+options.inactivePostfix+"|"+options.addedPostfix+")?)?\]$", "i");
 
 		var baseName = elements.eq(0).attr('name').match(baseNameRegexp);
 		if(baseName && baseName.length == 4) {
@@ -140,9 +143,10 @@
 			elements = newList;
 
 			// Check if some of the elementshav to be marked as deleted
-			if(options.deletedPostfix.length > 0) {
-				elements.find('input[name$="'+options.deletedPostfix+'\]"]').each(function() {
-					markAsDeleted($(this).parent());
+			if(options.inactivePostfix.length > 0) {
+				elements.find('input[name$="'+options.inactivePostfix+'\]"]').each(function() {
+					// at init
+					markAsInactiveAtStart($(this).parent());
 				});
 			}
 
@@ -266,16 +270,22 @@
 						case 'INPUT':
 						case 'SPAN':
 						case 'LI':
-							if($(event.target).hasClass('tagedit-listelement-deleted') == false &&
-							$(event.target).parent('li').hasClass('tagedit-listelement-deleted') == false) {
+						
+						    // activates the inactive elements
+						
+							// if($(event.target).hasClass('tagedit-listelement-inactive') == false 
+							//&& $(event.target).parent('li').hasClass('tagedit-listelement-inactive') == false) {
 								// Don't edit an deleted Items
+								
+								// edit no, but reactive should be possible
+								// I can't find a way to turn edit OFF, but keep the reactivate button!
 								return doEdit(event);
-							}
-						default:
-							$(this).find('#tagedit-input')
-								.removeAttr('disabled')
-								.removeClass('tagedit-input-disabled')
-								.focus();
+							// }
+                        // default:
+                        //  $(this).find('#tagedit-input')
+                        //      .removeAttr('disabled')
+                        //      .removeClass('tagedit-input-disabled')
+                        //      .focus();
 					}
 					return false;
 				})
@@ -317,14 +327,25 @@
 
 			var hidden = element.find(':hidden');
 			html = '<input type="text" name="tmpinput" autocomplete="off" value="'+hidden.val()+'" class="tagedit-edit-input" dir="'+options.direction+'"/>';
-			html += '<a class="tagedit-save" title="'+options.texts.saveEditLinkTitle+'">o</a>';
-			html += '<a class="tagedit-break" title="'+options.texts.breakEditLinkTitle+'">x</a>';
-
+            
+            if ($(element)[0].classList[2] != 'tagedit-listelement-inactive'){
+    			html += '<a class="tagedit-save" title="'+options.texts.saveEditLinkTitle+'">o</a>';
+    			html += '<a class="tagedit-break" title="'+options.texts.breakEditLinkTitle+'">x</a>';                
+            }
+            
+            
 			// If the Element is one from the Database, it can be deleted
 			if(options.allowDelete == true && element.find(':hidden').length > 0 &&
 			typeof element.find(':hidden').attr('name').match(baseNameRegexp)[3] != 'undefined') {
-				html += '<a class="tagedit-delete" title="'+options.texts.deleteLinkTitle+'">d</a>';
+
+                // write the apropriate title for link
+                if( $(element)[0].classList[2] != 'tagedit-listelement-inactive' ){
+                     html += '<a class="tagedit-delete" title="'+options.texts.inactiveLinkTitle+'">d</a>';
+                }else{
+                     html += '<a class="tagedit-delete" title="'+options.texts.activeLinkTitle+'">d</a>';                
+                }
 			}
+			
 
 			hidden.after(html);
 			element
@@ -344,12 +365,14 @@
 				.find('a.tagedit-delete')
 					.click(function() {
                         window.clearTimeout(closeTimer);
-						if(confirm(options.texts.deleteConfirmation)) {
+                        // if(confirm(options.texts.deleteConfirmation)) {
+                        
+                        // sure you want delete is not the right question anymore ;)    
 							markAsDeleted($(this).parent());
-						}
-                        else {
-                            $(this).parent().find(':text').trigger('finishEdit', [true]);
-                        }
+                        // }
+                        // else {
+                        //    $(this).parent().find(':text').trigger('finishEdit', [true]);
+                        // }
 						return false;
 					})
 				.end()
@@ -381,17 +404,50 @@
 		* @param element {object}
 		*/
 		function markAsDeleted(element) {
+		    
+			// reactivate tag 
+			if( $(element)[0].classList[2] == 'tagedit-listelement-inactive'){
+				
+				element
+				    .trigger('finishEdit', [true]) 
+				    .removeClass('tagedit-listelement-inactive')
+				    .attr('title', options.inactiveLinkTitle);
+
+    			element.find(':hidden').each(function() {
+    				var nameEndRegexp = new RegExp('('+options.inactivePostfix+')?\]');
+    				var name = $(this).attr('name').replace(nameEndRegexp, options.addedPostfix+']');
+    				$(this).attr('name', name);
+    			});
+				
+            // set tag inactive
+			}else{
+				element
+				    .trigger('finishEdit', [true]) 
+				    .addClass('tagedit-listelement-inactive')
+			        .attr('title', options.inactiveLinkTitle);
+                    
+    			element.find(':hidden').each(function() {
+    				var nameEndRegexp = new RegExp('('+options.addedPostfix+')?\]');
+    				var name = $(this).attr('name').replace(nameEndRegexp, options.inactivePostfix+']');
+    				$(this).attr('name', name);
+    			});
+			}
+		}
+
+
+		function markAsInactiveAtStart(element) {
+		    
 			element
 				.trigger('finishEdit', [true])
-				.addClass('tagedit-listelement-deleted')
+				.addClass('tagedit-listelement-inactive')
 				.attr('title', options.deletedElementTitle);
 				element.find(':hidden').each(function() {
-					var nameEndRegexp = new RegExp('('+options.addedPostfix+'|'+options.deletedPostfix+')?\]');
-					var name = $(this).attr('name').replace(nameEndRegexp, options.deletedPostfix+']');
+					var nameEndRegexp = new RegExp('('+options.addedPostfix+'|'+options.inactivePostfix+')?\]');
+					var name = $(this).attr('name').replace(nameEndRegexp, options.inactivePostfix+']');
 					$(this).attr('name', name);
 				});
-
 		}
+
 
 		/**
 		* Checks if a tag is already choosen.
