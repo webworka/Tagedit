@@ -77,7 +77,8 @@
 				activeLinkTitle: 'Activate this tag.',
 				deleteConfirmation: 'Are you sure to delete this entry?',
 				deletedElementTitle: 'This Element will be deleted.',
-				breakEditLinkTitle: 'Cancel'
+				breakEditLinkTitle: 'Cancel',
+				valueIsAlreadyInList: 'Value already in the list.'
 			}
 		}, options || {});
 
@@ -119,6 +120,7 @@
 		*
 		*/
 		function inputsToList() {
+		    
 			var html = '<ul class="tagedit-list '+options.additionalListClass+'">';
 
 			elements.each(function() {
@@ -178,12 +180,19 @@
 									id = isNewResult[1];
 								}
 
-								if(options.allowAdd == true || oldValue) {
+								if(options.allowAdd == true || oldValue) {								    
 									// Make a new tag in front the input
 									html = '<li class="tagedit-listelement tagedit-listelement-old">';
 									html += '<span dir="'+options.direction+'">' + $(this).val() + '</span>';
-									var name = oldValue? baseName + '['+id+options.addedPostfix+']' : baseName + '[]';
+									
+                                    // var name = oldValue? baseName + '['+id+options.addedPostfix+']' : baseName + '[]';
+                                    // html += '<input type="hidden" name="'+name+'" value="'+$(this).val()+'" />';
+
+                                    // How do I pass the 'id' to this place and for what?
+                                    // the id is only necessary for tags from autocomplete list
+									var name =  baseName+'[13'+options.addedPostfix+']';
 									html += '<input type="hidden" name="'+name+'" value="'+$(this).val()+'" />';
+
 									html += '<a class="tagedit-close" title="'+options.texts.removeLinkTitle+'">x</a>';
 									html += '</li>';
 
@@ -281,11 +290,11 @@
 								// I can't find a way to turn edit OFF, but keep the reactivate button!
 								return doEdit(event);
 							// }
-                        // default:
-                        //  $(this).find('#tagedit-input')
-                        //      .removeAttr('disabled')
-                        //      .removeClass('tagedit-input-disabled')
-                        //      .focus();
+                        default:
+                          $(this).find('#tagedit-input')
+                              .removeAttr('disabled')
+                              .removeClass('tagedit-input-disabled')
+                              .focus();
 					}
 					return false;
 				})
@@ -457,6 +466,7 @@
 		* @returns {Array} First item is a boolean, telling if the item should be put to the list, second is optional the ID from autocomplete list
 		*/
 		function isNew(value, checkAutocomplete) {
+		    
             checkAutocomplete = typeof checkAutocomplete == 'undefined'? false : checkAutocomplete;
 			var autoCompleteId = null;
             
@@ -471,6 +481,7 @@
 			});
 
 			if (isNew == true && checkAutocomplete == true && options.autocompleteOptions.source != false) {
+				
 				var result = [];
 				if ($.isArray(options.autocompleteOptions.source)) {
 					result = options.autocompleteOptions.source;
@@ -487,6 +498,7 @@
 						autocompleteURL += '?';
 					}
 					autocompleteURL += 'term=' + value;
+
 					$.ajax({
 						async: false,
 						url: autocompleteURL,
@@ -496,7 +508,7 @@
 						}
 					});
 				}
-                
+
 				// If there is an entry for that already in the autocomplete, don't use it (Check could be case sensitive or not)
 				for (var i = 0; i < result.length; i++) {
                     var label = options.checkNewEntriesCaseSensitive == true? result[i].label : result[i].label.toLowerCase();
@@ -507,7 +519,15 @@
 					}
 				}
 			}
-
+			
+			// we have to tell the user that the tag is already in the list
+			// but I guess this isn't the right place			
+			// else{
+			//                 if(isNew == false){
+			//                     alert(options.texts.valueIsAlreadyInList);
+			//                 }
+			//           }
+			
 			return new Array(isNew, autoCompleteId);
 		}
 	}
