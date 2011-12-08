@@ -307,6 +307,9 @@
 		* return {boolean}
 		*/
 		function doEdit(event) {
+		    
+		    //console.log($(event.target))
+		    
 			if(options.allowEdit == false) {
 				// Do nothing
 				return;
@@ -334,21 +337,30 @@
 				return false;
 			});
 
+
+			var tag_state = element.find(':hidden').attr('name').match(baseNameRegexp)[3];
+
+
 			var hidden = element.find(':hidden');
 			html = '<input type="text" name="tmpinput" autocomplete="off" value="'+hidden.val()+'" class="tagedit-edit-input" dir="'+options.direction+'"/>';
             
-            if ($(element)[0].classList[2] != 'tagedit-listelement-inactive'){
+            if (tag_state != '-i'){
     			html += '<a class="tagedit-save" title="'+options.texts.saveEditLinkTitle+'">o</a>';
     			html += '<a class="tagedit-break" title="'+options.texts.breakEditLinkTitle+'">x</a>';                
+            }else{
+                
+                //console.log('dont make the textfield editable')
             }
             
             
 			// If the Element is one from the Database, it can be deleted
+			
 			if(options.allowDelete == true && element.find(':hidden').length > 0 &&
-			typeof element.find(':hidden').attr('name').match(baseNameRegexp)[3] != 'undefined') {
+			//typeof element.find(':hidden').attr('name').match(baseNameRegexp)[3] != 'undefined'
+			tag_state != 'undefined') {
 
                 // write the apropriate title for link
-                if( $(element)[0].classList[2] != 'tagedit-listelement-inactive' ){
+                if( tag_state == '-a' ){
                      html += '<a class="tagedit-delete" title="'+options.texts.inactiveLinkTitle+'">d</a>';
                 }else{
                      html += '<a class="tagedit-delete" title="'+options.texts.activeLinkTitle+'">d</a>';                
@@ -415,8 +427,8 @@
 		function markAsDeleted(element) {
 		    
 			// reactivate tag 
-			if( $(element)[0].classList[2] == 'tagedit-listelement-inactive'){
-				
+			if( element.find('.tagedit-break').length == 0 ){
+			
 				element
 				    .trigger('finishEdit', [true]) 
 				    .removeClass('tagedit-listelement-inactive')
@@ -427,14 +439,14 @@
     				var name = $(this).attr('name').replace(nameEndRegexp, options.addedPostfix+']');
     				$(this).attr('name', name);
     			});
-				
+			
             // set tag inactive
 			}else{
 				element
 				    .trigger('finishEdit', [true]) 
 				    .addClass('tagedit-listelement-inactive')
 			        .attr('title', options.inactiveLinkTitle);
-                    
+                
     			element.find(':hidden').each(function() {
     				var nameEndRegexp = new RegExp('('+options.addedPostfix+')?\]');
     				var name = $(this).attr('name').replace(nameEndRegexp, options.inactivePostfix+']');
