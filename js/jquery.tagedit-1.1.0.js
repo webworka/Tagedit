@@ -4,11 +4,11 @@
  *
  * Examples and documentation at: tagedit.webwork-albrecht.de
  * 
- * Copyright (c) 2010 Oliver Albrecht info@webwork-albrecht.de 
+ * Copyright (c) 2010 Oliver Albrecht <info@webwork-albrecht.de>
  *
  * License:
- * This work is licensed under a Creative Commons Attribution 3.0 Unported License.
- * http://creativecommons.org/licenses/by/3.0/
+ * This work is licensed under a MIT License
+ * http://www.opensource.org/licenses/mit-license.php
  *
  * @author Oliver Albrecht Mial: info@webwork-albrecht.de Twitter: @webworka
  * @version 1.1.0 (06/2011)
