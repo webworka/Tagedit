@@ -16,10 +16,23 @@ Author:
 Oliver Albrecht - Mail: info@webwork-albrecht.de Twitter: @webworka
 
 Version:
-1.1.0 (06/2011)
+1.2.1 (11/2011)
 
 
 ------ Changelog ---------
+
+v1.2.1 - 05.11.2011
+- Bugfix: When editing a tag, there was no check on the existing values (issue #15)
+- Extension: Pressing ESC while editing no does a reset
+
+v1.2.0 - 08.06.2011
+- Extension: Added Support for local data, remote url and function for autocomplete. Thanks to garjitec (issue #9 and #7)
+- Extension: Added option for breaking characters. Thanks to garjitec (issue #9)
+- Extension: Added option for Case Sesnsitive check of new entries. (issue #8)
+- Extension: Added support for pasting into input field. Thanks to garjitec (issue #9)
+- Bugfix: Items where not marked as deleted when taking to much time for confirmation
+- Merge: Cleaned up formatting. Thanks to garjitech (issue #9)
+- Merge: Changed the way that autocompleteURL is used to overwrite autocompleteOptions.source. Thanks to garjitec (issue #9)
 
 v1.1.0 - 05.06.2011
 - Bugfix: Putting an item that is inside the autocompletionlist was not possible without clicking on the item (issue #2) thanks to mmezzacca
