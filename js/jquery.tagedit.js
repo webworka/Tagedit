@@ -127,7 +127,8 @@
 						html += '<li class="tagedit-listelement tagedit-listelement-old">';
 						html += '<span dir="'+options.direction+'">' + $(this).val() + '</span>';
 						html += '<input type="hidden" name="'+baseName+'['+elementId+']" value="'+$(this).val()+'" />';
-						html += '<a class="tagedit-close" title="'+options.texts.removeLinkTitle+'">x</a>';
+						if(options.allowDelete)
+							html += '<a class="tagedit-close" title="'+options.texts.removeLinkTitle+'">x</a>';
 						html += '</li>';
 					}
 				}
@@ -272,10 +273,11 @@
 								return doEdit(event);
 							}
 						default:
-							$(this).find('#tagedit-input')
-								.removeAttr('disabled')
-								.removeClass('tagedit-input-disabled')
-								.focus();
+							if(options.allowAdd)
+								$(this).find('#tagedit-input')
+									.removeAttr('disabled')
+									.removeClass('tagedit-input-disabled')
+									.focus();
 					}
 					return false;
 				})
