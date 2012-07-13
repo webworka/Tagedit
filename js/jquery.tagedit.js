@@ -5,13 +5,14 @@
 * Examples and documentation at: tagedit.webwork-albrecht.de
 *
 * Copyright (c) 2010 Oliver Albrecht <info@webwork-albrecht.de>
+* Copyright (c) 2012 Thomas Brüderli <thomas@roundcube.net>
 *
 * License:
 * This work is licensed under a MIT License
 * http://www.opensource.org/licenses/mit-license.php
 *
 * @author Oliver Albrecht Mial: info@webwork-albrecht.de Twitter: @webworka
-* @version 1.2.1 (11/2011)
+* @version 1.2.2 (07/2012)
 * Requires: jQuery v1.4+, jQueryUI v1.8+, jQuerry.autoGrowInput
 *
 * Example of usage:
@@ -75,7 +76,8 @@
 				deleteConfirmation: 'Are you sure to delete this entry?',
 				deletedElementTitle: 'This Element will be deleted.',
 				breakEditLinkTitle: 'Cancel'
-			}
+			},
+			tabindex: false
 		}, options || {});
 
 		// no action if there are no elements
@@ -107,6 +109,11 @@
 			alert('elementname dows not match the expected format (regexp: '+baseNameRegexp+')')
 			return;
 		}
+
+		// read tabindex from source element
+		var ti;
+		if (!options.tabindex && (ti = elements.eq(0).attr('tabindex')))
+			options.tabindex = ti;
 
 		// init elements
 		inputsToList();
@@ -155,8 +162,11 @@
 
 			elements
 				.append(html)
+				.attr('tabindex', options.tabindex) // set tabindex to <ul> to recieve focus
+
 				// Set function on the input
 				.find('#tagedit-input')
+					.attr('tabindex', options.tabindex)
 					.each(function() {
 						$(this).autoGrowInput({comfortZone: 15, minWidth: 15, maxWidth: 20000});
 
@@ -279,6 +289,8 @@
 					}
 					return false;
 				})
+				// forward focus event (on tabbing through the form)
+				.focus(function(e){ $(this).click(); })
 		}
 
 		/**
