@@ -424,16 +424,10 @@
 				}
                 else if (typeof options.autocompleteOptions.source === "string") {
 					// Check also autocomplete values
-					var autocompleteURL = options.autocompleteOptions.source;
-					if (autocompleteURL.match(/\?/)) {
-						autocompleteURL += '&';
-					} else {
-						autocompleteURL += '?';
-					}
-					autocompleteURL += 'term=' + value;
 					$.ajax({
 						async: false,
-						url: autocompleteURL,
+						url: options.autocompleteOptions.source,
+						data: {term: value},
 						dataType: 'json',
 						complete: function (XMLHttpRequest, textStatus) {
 							result = $.parseJSON(XMLHttpRequest.responseText);
