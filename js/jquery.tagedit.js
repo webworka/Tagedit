@@ -52,6 +52,7 @@
 		options = $.extend(true, {
 			// default options here
 			autocompleteURL: null,
+            checkToDeleteURL: null,
 			deletedPostfix: '-d',
 			addedPostfix: '-a',
 			additionalListClass: '',
@@ -67,14 +68,15 @@
 				}
 			},
 			breakKeyCodes: [ 13, 44 ],
-            checkNewEntriesCaseSensitive: false,
+			checkNewEntriesCaseSensitive: false,
 			texts: {
 				removeLinkTitle: 'Remove from list.',
 				saveEditLinkTitle: 'Save changes.',
 				deleteLinkTitle: 'Delete this tag from database.',
 				deleteConfirmation: 'Are you sure to delete this entry?',
 				deletedElementTitle: 'This Element will be deleted.',
-				breakEditLinkTitle: 'Cancel'
+				breakEditLinkTitle: 'Cancel',
+				forceDeleteConfirmation: 'There are more records using this tag, are you sure do you want to remove it?'
 			}
 		}, options || {});
 
@@ -134,7 +136,7 @@
 			});
 
 			// replace Elements with the list and save the list in the local variable elements
-			elements.last().after(html)
+			elements.last().after(html);
 			var newList = elements.last().next();
 			elements.remove();
 			elements = newList;
@@ -343,13 +345,22 @@
 				.end()
 				.find('a.tagedit-delete')
 					.click(function() {
-                        window.clearTimeout(closeTimer);
+						window.clearTimeout(closeTimer);
 						if(confirm(options.texts.deleteConfirmation)) {
-							markAsDeleted($(this).parent());
+							var canDelete = checkToDelete($(this).parent());
+							if (!canDelete && confirm(options.texts.forceDeleteConfirmation)) {
+								markAsDeleted($(this).parent());
+							}
+
+							if(canDelete) {
+								markAsDeleted($(this).parent());
+							}
+
+							$(this).parent().find(':text').trigger('finishEdit', [true]);
 						}
-                        else {
-                            $(this).parent().find(':text').trigger('finishEdit', [true]);
-                        }
+						else {
+							$(this).parent().find(':text').trigger('finishEdit', [true]);
+						}
 						return false;
 					})
 				.end()
@@ -374,6 +385,40 @@
 						closeTimer = window.setTimeout(function() {that.parent().trigger('finishEdit', [true])}, 500);
 					});
 		}
+
+		/**
+		 * Verifies if the tag select to be deleted is used by other records using an Ajax request.
+		 *
+		 * @param element
+		 * @returns {boolean}
+		 */
+		function checkToDelete(element) {
+			// if no URL is provide will not verify
+			if(options.checkToDeleteURL === null)
+				return false;
+
+			var inputName = element.find('input:hidden').attr('name');
+			var idPattern = new RegExp('\\d');
+			var tagId = inputName.match(idPattern);
+			$.ajax({
+				async   : false,
+				url     : options.checkToDeleteURL,
+				dataType: 'json',
+				type    : 'POST',
+				data    : { 'tagId' : tagId},
+				complete: function (XMLHttpRequest, textStatus) {
+
+					// Expected JSON Object: { "success": Boolean, "allowDelete": Boolean}
+					result = $.parseJSON(XMLHttpRequest.responseText);
+					if(result.success === true){
+						return result.allowDelete;
+					}
+
+					return false;
+				}
+			});
+		}
+
 
 		/**
 		* Marks a single Tag as deleted.
@@ -401,14 +446,14 @@
 		* @returns {Array} First item is a boolean, telling if the item should be put to the list, second is optional the ID from autocomplete list
 		*/
 		function isNew(value, checkAutocomplete) {
-            checkAutocomplete = typeof checkAutocomplete == 'undefined'? false : checkAutocomplete;
+			checkAutocomplete = typeof checkAutocomplete == 'undefined'? false : checkAutocomplete;
 			var autoCompleteId = null;
-            
-            var compareValue = options.checkNewEntriesCaseSensitive == true? value : value.toLowerCase();
+
+			var compareValue = options.checkNewEntriesCaseSensitive == true? value : value.toLowerCase();
 
 			var isNew = true;
 			elements.find('li.tagedit-listelement-old input:hidden').each(function() {
-                var elementValue = options.checkNewEntriesCaseSensitive == true? $(this).val() : $(this).val().toLowerCase();
+				var elementValue = options.checkNewEntriesCaseSensitive == true? $(this).val() : $(this).val().toLowerCase();
 				if(elementValue == compareValue) {
 					isNew = false;
 				}
@@ -419,10 +464,10 @@
 				if ($.isArray(options.autocompleteOptions.source)) {
 					result = options.autocompleteOptions.source;
 				}
-                else if ($.isFunction(options.autocompleteOptions.source)) {
+				else if ($.isFunction(options.autocompleteOptions.source)) {
 					options.autocompleteOptions.source({term: value}, function (data) {result = data});
 				}
-                else if (typeof options.autocompleteOptions.source === "string") {
+				else if (typeof options.autocompleteOptions.source === "string") {
 					// Check also autocomplete values
 					var autocompleteURL = options.autocompleteOptions.source;
 					if (autocompleteURL.match(/\?/)) {
@@ -440,10 +485,10 @@
 						}
 					});
 				}
-                
+
 				// If there is an entry for that already in the autocomplete, don't use it (Check could be case sensitive or not)
 				for (var i = 0; i < result.length; i++) {
-                    var label = options.checkNewEntriesCaseSensitive == true? result[i].label : result[i].label.toLowerCase();
+					var label = options.checkNewEntriesCaseSensitive == true? result[i].label : result[i].label.toLowerCase();
 					if (label == compareValue) {
 						isNew = false;
 						autoCompleteId = result[i].id;
