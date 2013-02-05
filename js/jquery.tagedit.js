@@ -68,7 +68,7 @@
 				}
 			},
 			breakKeyCodes: [ 13, 44 ],
-            checkNewEntriesCaseSensitive: false,
+			checkNewEntriesCaseSensitive: false,
 			texts: {
 				removeLinkTitle: 'Remove from list.',
 				saveEditLinkTitle: 'Save changes.',
@@ -136,7 +136,7 @@
 			});
 
 			// replace Elements with the list and save the list in the local variable elements
-			elements.last().after(html)
+			elements.last().after(html);
 			var newList = elements.last().next();
 			elements.remove();
 			elements = newList;
@@ -345,7 +345,7 @@
 				.end()
 				.find('a.tagedit-delete')
 					.click(function() {
-                        window.clearTimeout(closeTimer);
+						window.clearTimeout(closeTimer);
 						if(confirm(options.texts.deleteConfirmation)) {
 							var canDelete = checkToDelete($(this).parent());
 							if (!canDelete && confirm(options.texts.forceDeleteConfirmation)) {
@@ -446,14 +446,14 @@
 		* @returns {Array} First item is a boolean, telling if the item should be put to the list, second is optional the ID from autocomplete list
 		*/
 		function isNew(value, checkAutocomplete) {
-            checkAutocomplete = typeof checkAutocomplete == 'undefined'? false : checkAutocomplete;
+			checkAutocomplete = typeof checkAutocomplete == 'undefined'? false : checkAutocomplete;
 			var autoCompleteId = null;
-            
-            var compareValue = options.checkNewEntriesCaseSensitive == true? value : value.toLowerCase();
+
+			var compareValue = options.checkNewEntriesCaseSensitive == true? value : value.toLowerCase();
 
 			var isNew = true;
 			elements.find('li.tagedit-listelement-old input:hidden').each(function() {
-                var elementValue = options.checkNewEntriesCaseSensitive == true? $(this).val() : $(this).val().toLowerCase();
+				var elementValue = options.checkNewEntriesCaseSensitive == true? $(this).val() : $(this).val().toLowerCase();
 				if(elementValue == compareValue) {
 					isNew = false;
 				}
@@ -464,10 +464,10 @@
 				if ($.isArray(options.autocompleteOptions.source)) {
 					result = options.autocompleteOptions.source;
 				}
-                else if ($.isFunction(options.autocompleteOptions.source)) {
+				else if ($.isFunction(options.autocompleteOptions.source)) {
 					options.autocompleteOptions.source({term: value}, function (data) {result = data});
 				}
-                else if (typeof options.autocompleteOptions.source === "string") {
+				else if (typeof options.autocompleteOptions.source === "string") {
 					// Check also autocomplete values
 					var autocompleteURL = options.autocompleteOptions.source;
 					if (autocompleteURL.match(/\?/)) {
@@ -485,10 +485,10 @@
 						}
 					});
 				}
-                
+
 				// If there is an entry for that already in the autocomplete, don't use it (Check could be case sensitive or not)
 				for (var i = 0; i < result.length; i++) {
-                    var label = options.checkNewEntriesCaseSensitive == true? result[i].label : result[i].label.toLowerCase();
+					var label = options.checkNewEntriesCaseSensitive == true? result[i].label : result[i].label.toLowerCase();
 					if (label == compareValue) {
 						isNew = false;
 						autoCompleteId = result[i].id;
