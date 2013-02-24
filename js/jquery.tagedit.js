@@ -52,8 +52,9 @@
 		options = $.extend(true, {
 			// default options here
 			autocompleteURL: null,
-			deletedPostfix: '-d',
-			addedPostfix: '-a',
+			deletedPostfix: '-d',       // obsolet
+			inactivePostfix: '-i',      // inactive
+			addedPostfix: '-a',         // active
 			additionalListClass: '',
 			allowEdit: true,
 			allowDelete: true,
@@ -72,9 +73,12 @@
 				removeLinkTitle: 'Remove from list.',
 				saveEditLinkTitle: 'Save changes.',
 				deleteLinkTitle: 'Delete this tag from database.',
+				inactiveLinkTitle: 'Inactivate this tag.',
+				activeLinkTitle: 'Activate this tag.',
 				deleteConfirmation: 'Are you sure to delete this entry?',
 				deletedElementTitle: 'This Element will be deleted.',
-				breakEditLinkTitle: 'Cancel'
+				breakEditLinkTitle: 'Cancel',
+				valueIsAlreadyInList: 'Value already in the list.'
 			}
 		}, options || {});
 
@@ -96,7 +100,7 @@
 
 		var elements = this;
 
-		var baseNameRegexp = new RegExp("^(.*)\\[([0-9]*?("+options.deletedPostfix+"|"+options.addedPostfix+")?)?\]$", "i");
+		var baseNameRegexp = new RegExp("^(.*)\\[([0-9]*?("+options.inactivePostfix+"|"+options.addedPostfix+")?)?\]$", "i");
 
 		var baseName = elements.eq(0).attr('name').match(baseNameRegexp);
 		if(baseName && baseName.length == 4) {
@@ -116,6 +120,7 @@
 		*
 		*/
 		function inputsToList() {
+		    
 			var html = '<ul class="tagedit-list '+options.additionalListClass+'">';
 
 			elements.each(function() {
@@ -140,9 +145,10 @@
 			elements = newList;
 
 			// Check if some of the elementshav to be marked as deleted
-			if(options.deletedPostfix.length > 0) {
-				elements.find('input[name$="'+options.deletedPostfix+'\]"]').each(function() {
-					markAsDeleted($(this).parent());
+			if(options.inactivePostfix.length > 0) {
+				elements.find('input[name$="'+options.inactivePostfix+'\]"]').each(function() {
+					// at init
+					markAsInactiveAtStart($(this).parent());
 				});
 			}
 
@@ -174,12 +180,19 @@
 									id = isNewResult[1];
 								}
 
-								if(options.allowAdd == true || oldValue) {
+								if(options.allowAdd == true || oldValue) {								    
 									// Make a new tag in front the input
 									html = '<li class="tagedit-listelement tagedit-listelement-old">';
 									html += '<span dir="'+options.direction+'">' + $(this).val() + '</span>';
-									var name = oldValue? baseName + '['+id+options.addedPostfix+']' : baseName + '[]';
+									
+                                    // var name = oldValue? baseName + '['+id+options.addedPostfix+']' : baseName + '[]';
+                                    // html += '<input type="hidden" name="'+name+'" value="'+$(this).val()+'" />';
+
+                                    // How do I pass the 'id' to this place and for what?
+                                    // the id is only necessary for tags from autocomplete list
+									var name =  baseName+'[13'+options.addedPostfix+']';
 									html += '<input type="hidden" name="'+name+'" value="'+$(this).val()+'" />';
+
 									html += '<a class="tagedit-close" title="'+options.texts.removeLinkTitle+'">x</a>';
 									html += '</li>';
 
@@ -266,16 +279,22 @@
 						case 'INPUT':
 						case 'SPAN':
 						case 'LI':
-							if($(event.target).hasClass('tagedit-listelement-deleted') == false &&
-							$(event.target).parent('li').hasClass('tagedit-listelement-deleted') == false) {
+						
+						    // activates the inactive elements
+						
+							// if($(event.target).hasClass('tagedit-listelement-inactive') == false 
+							//&& $(event.target).parent('li').hasClass('tagedit-listelement-inactive') == false) {
 								// Don't edit an deleted Items
+								
+								// edit no, but reactive should be possible
+								// I can't find a way to turn edit OFF, but keep the reactivate button!
 								return doEdit(event);
-							}
-						default:
-							$(this).find('#tagedit-input')
-								.removeAttr('disabled')
-								.removeClass('tagedit-input-disabled')
-								.focus();
+							// }
+                        default:
+                          $(this).find('#tagedit-input')
+                              .removeAttr('disabled')
+                              .removeClass('tagedit-input-disabled')
+                              .focus();
 					}
 					return false;
 				})
@@ -288,6 +307,9 @@
 		* return {boolean}
 		*/
 		function doEdit(event) {
+		    
+		    //console.log($(event.target))
+		    
 			if(options.allowEdit == false) {
 				// Do nothing
 				return;
@@ -315,16 +337,36 @@
 				return false;
 			});
 
+
+			var tag_state = element.find(':hidden').attr('name').match(baseNameRegexp)[3];
+
+
 			var hidden = element.find(':hidden');
 			html = '<input type="text" name="tmpinput" autocomplete="off" value="'+hidden.val()+'" class="tagedit-edit-input" dir="'+options.direction+'"/>';
-			html += '<a class="tagedit-save" title="'+options.texts.saveEditLinkTitle+'">o</a>';
-			html += '<a class="tagedit-break" title="'+options.texts.breakEditLinkTitle+'">x</a>';
-
+            
+            if (tag_state != '-i'){
+    			html += '<a class="tagedit-save" title="'+options.texts.saveEditLinkTitle+'">o</a>';
+    			html += '<a class="tagedit-break" title="'+options.texts.breakEditLinkTitle+'">x</a>';                
+            }else{
+                
+                //console.log('dont make the textfield editable')
+            }
+            
+            
 			// If the Element is one from the Database, it can be deleted
+			
 			if(options.allowDelete == true && element.find(':hidden').length > 0 &&
-			typeof element.find(':hidden').attr('name').match(baseNameRegexp)[3] != 'undefined') {
-				html += '<a class="tagedit-delete" title="'+options.texts.deleteLinkTitle+'">d</a>';
+			//typeof element.find(':hidden').attr('name').match(baseNameRegexp)[3] != 'undefined'
+			tag_state != 'undefined') {
+
+                // write the apropriate title for link
+                if( tag_state == '-a' ){
+                     html += '<a class="tagedit-delete" title="'+options.texts.inactiveLinkTitle+'">d</a>';
+                }else{
+                     html += '<a class="tagedit-delete" title="'+options.texts.activeLinkTitle+'">d</a>';                
+                }
 			}
+			
 
 			hidden.after(html);
 			element
@@ -344,12 +386,14 @@
 				.find('a.tagedit-delete')
 					.click(function() {
                         window.clearTimeout(closeTimer);
-						if(confirm(options.texts.deleteConfirmation)) {
+                        // if(confirm(options.texts.deleteConfirmation)) {
+                        
+                        // sure you want delete is not the right question anymore ;)    
 							markAsDeleted($(this).parent());
-						}
-                        else {
-                            $(this).parent().find(':text').trigger('finishEdit', [true]);
-                        }
+                        // }
+                        // else {
+                        //    $(this).parent().find(':text').trigger('finishEdit', [true]);
+                        // }
 						return false;
 					})
 				.end()
@@ -381,17 +425,50 @@
 		* @param element {object}
 		*/
 		function markAsDeleted(element) {
+		    
+			// reactivate tag 
+			if( element.find('.tagedit-break').length == 0 ){
+			
+				element
+				    .trigger('finishEdit', [true]) 
+				    .removeClass('tagedit-listelement-inactive')
+				    .attr('title', options.inactiveLinkTitle);
+
+    			element.find(':hidden').each(function() {
+    				var nameEndRegexp = new RegExp('('+options.inactivePostfix+')?\]');
+    				var name = $(this).attr('name').replace(nameEndRegexp, options.addedPostfix+']');
+    				$(this).attr('name', name);
+    			});
+			
+            // set tag inactive
+			}else{
+				element
+				    .trigger('finishEdit', [true]) 
+				    .addClass('tagedit-listelement-inactive')
+			        .attr('title', options.inactiveLinkTitle);
+                
+    			element.find(':hidden').each(function() {
+    				var nameEndRegexp = new RegExp('('+options.addedPostfix+')?\]');
+    				var name = $(this).attr('name').replace(nameEndRegexp, options.inactivePostfix+']');
+    				$(this).attr('name', name);
+    			});
+			}
+		}
+
+
+		function markAsInactiveAtStart(element) {
+		    
 			element
 				.trigger('finishEdit', [true])
-				.addClass('tagedit-listelement-deleted')
+				.addClass('tagedit-listelement-inactive')
 				.attr('title', options.deletedElementTitle);
 				element.find(':hidden').each(function() {
-					var nameEndRegexp = new RegExp('('+options.addedPostfix+'|'+options.deletedPostfix+')?\]');
-					var name = $(this).attr('name').replace(nameEndRegexp, options.deletedPostfix+']');
+					var nameEndRegexp = new RegExp('('+options.addedPostfix+'|'+options.inactivePostfix+')?\]');
+					var name = $(this).attr('name').replace(nameEndRegexp, options.inactivePostfix+']');
 					$(this).attr('name', name);
 				});
-
 		}
+
 
 		/**
 		* Checks if a tag is already choosen.
@@ -401,6 +478,7 @@
 		* @returns {Array} First item is a boolean, telling if the item should be put to the list, second is optional the ID from autocomplete list
 		*/
 		function isNew(value, checkAutocomplete) {
+		    
             checkAutocomplete = typeof checkAutocomplete == 'undefined'? false : checkAutocomplete;
 			var autoCompleteId = null;
             
@@ -415,6 +493,7 @@
 			});
 
 			if (isNew == true && checkAutocomplete == true && options.autocompleteOptions.source != false) {
+				
 				var result = [];
 				if ($.isArray(options.autocompleteOptions.source)) {
 					result = options.autocompleteOptions.source;
@@ -431,6 +510,7 @@
 						autocompleteURL += '?';
 					}
 					autocompleteURL += 'term=' + value;
+
 					$.ajax({
 						async: false,
 						url: autocompleteURL,
@@ -440,7 +520,7 @@
 						}
 					});
 				}
-                
+
 				// If there is an entry for that already in the autocomplete, don't use it (Check could be case sensitive or not)
 				for (var i = 0; i < result.length; i++) {
                     var label = options.checkNewEntriesCaseSensitive == true? result[i].label : result[i].label.toLowerCase();
@@ -451,7 +531,15 @@
 					}
 				}
 			}
-
+			
+			// we have to tell the user that the tag is already in the list
+			// but I guess this isn't the right place			
+			// else{
+			//                 if(isNew == false){
+			//                     alert(options.texts.valueIsAlreadyInList);
+			//                 }
+			//           }
+			
 			return new Array(isNew, autoCompleteId);
 		}
 	}

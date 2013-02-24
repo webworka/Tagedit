@@ -41,7 +41,7 @@ label {font-weight: bold; margin-bottom: 0.5em; display: block;}
 .tagedit-list li.tagedit-listelement-edit a.tagedit-close,
 .tagedit-list li.tagedit-listelement-edit span {display: none;}
 /* Item is marked as deleted */
-.tagedit-list li.tagedit-listelement-deleted,
-.tagedit-list li.tagedit-listelement-deleted:hover {padding-right: 5px; background-color: #FFD6D6; border-color: #FFB7B7; border-style: dashed; }
-.tagedit-list li.tagedit-listelement-deleted span {text-decoration: line-through;}
-.tagedit-list li.tagedit-listelement-deleted a.tagedit-close {margin-right: 0;}
+.tagedit-list li.tagedit-listelement-inactive,
+.tagedit-list li.tagedit-listelement-inactive:hover {padding-right: 5px; background-color: #FFD6D6; border-color: #FFB7B7; border-style: dashed; }
+.tagedit-list li.tagedit-listelement-inactive span {text-decoration: line-through;}
+.tagedit-list li.tagedit-listelement-inactive a.tagedit-close {margin-right: 0;}
