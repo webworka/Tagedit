@@ -456,7 +456,7 @@
 				// If there is an entry for that already in the autocomplete, don't use it (Check could be case sensitive or not)
 				for (var i = 0; i < result.length; i++) {
 					var label = typeof result[i] == 'string' ? result[i] : result[i].label;
-					if (options.checkNewEntriesCaseSensitive == true)
+					if (options.checkNewEntriesCaseSensitive == false)
 						label = label.toLowerCase();
 					if (label == compareValue) {
 						isNew = false;
