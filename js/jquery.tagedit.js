@@ -177,9 +177,9 @@
 							var checkAutocomplete = oldValue == true? false : true;
 							// check if the Value ist new
 							var isNewResult = isNew($(this).val(), checkAutocomplete);
-							if(isNewResult[0] === true || (isNewResult[0] === false && typeof isNewResult[1] == 'string')) {
+							if(isNewResult[0] === true || isNewResult[1] != null) {
 
-								if(oldValue == false && typeof isNewResult[1] == 'string') {
+								if(oldValue == false && isNewResult[1] != null) {
 									oldValue = true;
 									id = isNewResult[1];
 								}
@@ -460,7 +460,7 @@
 						label = label.toLowerCase();
 					if (label == compareValue) {
 						isNew = false;
-						autoCompleteId = result[i].id;
+						autoCompleteId = typeof result[i] == 'string' ? i : result[i].id;
 						break;
 					}
 				}
