@@ -4,11 +4,11 @@
 *
 * Examples and documentation at: tagedit.webwork-albrecht.de
 *
-* Copyright (c) 2010 Oliver Albrecht info@webwork-albrecht.de
+* Copyright (c) 2010 Oliver Albrecht <info@webwork-albrecht.de>
 *
 * License:
-* This work is licensed under a Creative Commons Attribution 3.0 Unported License.
-* http://creativecommons.org/licenses/by/3.0/
+* This work is licensed under a MIT License
+* http://www.opensource.org/licenses/mit-license.php
 *
 * @author Oliver Albrecht Mial: info@webwork-albrecht.de Twitter: @webworka
 * @version 1.2.1 (11/2011)
@@ -167,9 +167,9 @@
 							var checkAutocomplete = oldValue == true? false : true;
 							// check if the Value ist new
 							var isNewResult = isNew($(this).val(), checkAutocomplete);
-							if(isNewResult[0] === true || (isNewResult[0] === false && typeof isNewResult[1] == 'string')) {
+							if(isNewResult[0] === true || isNewResult[1] != null) {
 
-								if(oldValue == false && typeof isNewResult[1] == 'string') {
+								if(oldValue == false && isNewResult[1] != null) {
 									oldValue = true;
 									id = isNewResult[1];
 								}
@@ -446,7 +446,7 @@
                     var label = options.checkNewEntriesCaseSensitive == true? result[i].label : result[i].label.toLowerCase();
 					if (label == compareValue) {
 						isNew = false;
-						autoCompleteId = result[i].id;
+						autoCompleteId = typeof result[i] == 'string' ? i : result[i].id;
 						break;
 					}
 				}

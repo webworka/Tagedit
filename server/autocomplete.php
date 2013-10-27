@@ -3,12 +3,6 @@
  * Script for the autocompletion in jQuery Plugin tagedit.
  *
  * @author Oliver Albrecht <info@webwork-albrecht.de>
- * @version 1.0.0
- * @copyright Copyright (c) 2010, Oliver Albrecht
- *
- * Dual licensed under the MIT and GPL licenses:
- *   http://www.opensource.org/licenses/mit-license.php
- *   http://www.gnu.org/licenses/gpl.html
  */
 
 $autocompletiondata = array(
