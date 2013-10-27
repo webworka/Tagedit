@@ -16,10 +16,17 @@ Author:
 Oliver Albrecht - Mail: info@webwork-albrecht.de Twitter: @webworka
 
 Version:
-1.2.1 (11/2011)
+1.5.0 (10/2013)
 
 
 ------ Changelog ---------
+
+v1.5.0 - 28.10.2013
+- updated to jQuery 1.9
+- updated to jQueryUI 1.10
+- fix for autocomplete when source is an array (thanks to alecpl in issue #35)
+- autocomplete URL with correct encoding (thanks to yulanggong in issue #36)
+- New feature: "When deleting a tag allow to verify if other records are using it before delete" (thanks to danielcsgomes, issue #37)
 
 v1.2.1 - 05.11.2011
 - Bugfix: When editing a tag, there was no check on the existing values (issue #15)

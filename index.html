@@ -26,8 +26,8 @@
 		
 		// Fullexample
 		$( "#tagform-full" ).find('input.tag').tagedit({
-			//autocompleteURL: 'server/autocomplete.php'
-            autocompleteOptions: {source: ["tag1", "tag2"]}
+			autocompleteURL: 'server/autocomplete.php',
+            //checkToDeleteURL: 'server/checkToDelete.php'
 		});
 		
 		// Edit only
@@ -49,12 +49,11 @@
     </p>
 	<p>
 		You can watch a <a href="http://www.youtube.com/watch?v=TU_FdBlSPNc">screencast on youtube</a> and get the <a href="https://github.com/webworka/Tagedit">code on github</a>.<br/>
-		A (maybe older) release can also be found ath the <a href="http://plugins.jquery.com/project/Tagedit">jQuery plugin repository</a>.
 	</p>
 	<h2>Dependencies</h2>
 	<ul>
-		<li><a href="http://jquery.com">jQuery 1.4.x</a></li>
-		<li><a href="http://jqueryui.com">jQuery UI 1.8.x</a></li>
+		<li><a href="http://jquery.com">jQuery 1.9.x</a></li>
+		<li><a href="http://jqueryui.com">jQuery UI 1.10.x</a></li>
 		<li><a href="http://jsbin.com/ahaxe">autoGrowInput</a> by <a href="http://james.padolsey.com">James Padolsey</a></li>
 	</ul>
 	
@@ -78,10 +77,6 @@
 			<input type="submit" name="save" value="Save"/>
 		</p>
     </form>
-	
-	<p class="footer">
-		<a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.<br/>
-		&copy; 2010 Oliver Albrecht - <a href="http://webwork-albrecht.de">webwork-albrecht.de</a>
-	</p>
+
 </body>
 </html>
