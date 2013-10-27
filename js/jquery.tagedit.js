@@ -394,12 +394,14 @@
 		 */
 		function checkToDelete(element) {
 			// if no URL is provide will not verify
-			if(options.checkToDeleteURL === null)
+			if(options.checkToDeleteURL === null) {
 				return false;
+            }
 
 			var inputName = element.find('input:hidden').attr('name');
 			var idPattern = new RegExp('\\d');
 			var tagId = inputName.match(idPattern);
+            var remote = false;
 			$.ajax({
 				async   : false,
 				url     : options.checkToDeleteURL,
@@ -411,12 +413,12 @@
 					// Expected JSON Object: { "success": Boolean, "allowDelete": Boolean}
 					result = $.parseJSON(XMLHttpRequest.responseText);
 					if(result.success === true){
-						return result.allowDelete;
+                        remote = result.allowDelete;
 					}
-
-					return false;
 				}
 			});
+
+            return remote;
 		}
 
 
