@@ -394,8 +394,9 @@
          */
         function checkToDelete(element) {
             // if no URL is provide will not verify
-            if(options.checkToDeleteURL === null)
+            if(options.checkToDeleteURL === null) {
                 return false;
+            }
 
             var inputName = element.find('input:hidden').attr('name');
             var idPattern = new RegExp('\\d');
@@ -411,7 +412,7 @@
                 complete: function (XMLHttpRequest, textStatus) {
 
                     // Expected JSON Object: { "success": Boolean, "allowDelete": Boolean}
-                    result = $.parseJSON(XMLHttpRequest.responseText);
+                    var result = $.parseJSON(XMLHttpRequest.responseText);
                     if(result.success === true){
                         checkResult = result.allowDelete;
                     }
