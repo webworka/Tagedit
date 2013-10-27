@@ -162,9 +162,9 @@
 					.each(function() {
 						$(this).autoGrowInput({comfortZone: 15, minWidth: 15, maxWidth: 20000});
 
-						// Event ist triggert in case of choosing an item from the autocomplete, or finish the input
+						// Event is triggert in case of choosing an item from the autocomplete, or finish the input
 						$(this).bind('transformToTag', function(event, id) {
-							var oldValue = (typeof id != 'undefined' && id.length > 0);
+							var oldValue = (typeof id != 'undefined' && (id.length > 0 || id > 0));
 
 							var checkAutocomplete = oldValue == true? false : true;
 							// check if the Value ist new
