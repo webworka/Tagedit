@@ -169,9 +169,9 @@
 							var checkAutocomplete = oldValue == true? false : true;
 							// check if the Value ist new
 							var isNewResult = isNew($(this).val(), checkAutocomplete);
-							if(isNewResult[0] === true || isNewResult[1] != null) {
+							if(isNewResult[0] === true || (isNewResult[0] === false && typeof isNewResult[1] == 'string')) {
 
-								if(oldValue == false && isNewResult[1] != null) {
+								if(oldValue == false && typeof isNewResult[1] == 'string') {
 									oldValue = true;
 									id = isNewResult[1];
 								}
@@ -394,14 +394,12 @@
 		 */
 		function checkToDelete(element) {
 			// if no URL is provide will not verify
-			if(options.checkToDeleteURL === null) {
+			if(options.checkToDeleteURL === null)
 				return false;
-            }
 
 			var inputName = element.find('input:hidden').attr('name');
 			var idPattern = new RegExp('\\d');
 			var tagId = inputName.match(idPattern);
-            var remote = false;
 			$.ajax({
 				async   : false,
 				url     : options.checkToDeleteURL,
@@ -413,12 +411,12 @@
 					// Expected JSON Object: { "success": Boolean, "allowDelete": Boolean}
 					result = $.parseJSON(XMLHttpRequest.responseText);
 					if(result.success === true){
-                        remote = result.allowDelete;
+						return result.allowDelete;
 					}
+
+					return false;
 				}
 			});
-
-            return remote;
 		}
 
 
@@ -471,10 +469,16 @@
 				}
                 else if (typeof options.autocompleteOptions.source === "string") {
 					// Check also autocomplete values
+					var autocompleteURL = options.autocompleteOptions.source;
+					if (autocompleteURL.match(/\?/)) {
+						autocompleteURL += '&';
+					} else {
+						autocompleteURL += '?';
+					}
+					autocompleteURL += 'term=' + value;
 					$.ajax({
 						async: false,
-						url: options.autocompleteOptions.source,
-						data: {term: value},
+						url: autocompleteURL,
 						dataType: 'json',
 						complete: function (XMLHttpRequest, textStatus) {
 							result = $.parseJSON(XMLHttpRequest.responseText);
