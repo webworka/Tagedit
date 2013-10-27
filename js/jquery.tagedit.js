@@ -312,7 +312,7 @@
 				}
 
 				textfield.remove();
-				$(this).find('a.tagedit-save, a.tagedit-break, a.tagedit-delete, tester').remove(); // Workaround. This normaly has to be done by autogrow Plugin
+				$(this).find('a.tagedit-save, a.tagedit-break, a.tagedit-delete').remove(); // Workaround. This normaly has to be done by autogrow Plugin
 				$(this).removeClass('tagedit-listelement-edit').unbind('finishEdit');
 				return false;
 			});
