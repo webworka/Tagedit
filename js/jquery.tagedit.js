@@ -52,6 +52,7 @@
 		options = $.extend(true, {
 			// default options here
 			autocompleteURL: null,
+            checkToDeleteURL: null,
 			deletedPostfix: '-d',
 			addedPostfix: '-a',
 			additionalListClass: '',
@@ -74,7 +75,8 @@
 				deleteLinkTitle: 'Delete this tag from database.',
 				deleteConfirmation: 'Are you sure to delete this entry?',
 				deletedElementTitle: 'This Element will be deleted.',
-				breakEditLinkTitle: 'Cancel'
+				breakEditLinkTitle: 'Cancel',
+                forceDeleteConfirmation: 'There are more records using this tag, are you sure do you want to remove it?'
 			}
 		}, options || {});
 
@@ -310,7 +312,7 @@
 				}
 
 				textfield.remove();
-				$(this).find('a.tagedit-save, a.tagedit-break, a.tagedit-delete, tester').remove(); // Workaround. This normaly has to be done by autogrow Plugin
+				$(this).find('a.tagedit-save, a.tagedit-break, a.tagedit-delete').remove(); // Workaround. This normaly has to be done by autogrow Plugin
 				$(this).removeClass('tagedit-listelement-edit').unbind('finishEdit');
 				return false;
 			});
@@ -345,7 +347,16 @@
 					.click(function() {
                         window.clearTimeout(closeTimer);
 						if(confirm(options.texts.deleteConfirmation)) {
-							markAsDeleted($(this).parent());
+                            var canDelete = checkToDelete($(this).parent());
+                            if (!canDelete && confirm(options.texts.forceDeleteConfirmation)) {
+                                markAsDeleted($(this).parent());
+                            }
+
+                            if(canDelete) {
+                                markAsDeleted($(this).parent());
+                            }
+
+                            $(this).parent().find(':text').trigger('finishEdit', [true]);
 						}
                         else {
                             $(this).parent().find(':text').trigger('finishEdit', [true]);
@@ -374,6 +385,41 @@
 						closeTimer = window.setTimeout(function() {that.parent().trigger('finishEdit', [true])}, 500);
 					});
 		}
+
+        /**
+         * Verifies if the tag select to be deleted is used by other records using an Ajax request.
+         *
+         * @param element
+         * @returns {boolean}
+         */
+        function checkToDelete(element) {
+            // if no URL is provide will not verify
+            if(options.checkToDeleteURL === null)
+                return false;
+
+            var inputName = element.find('input:hidden').attr('name');
+            var idPattern = new RegExp('\\d');
+            var tagId = inputName.match(idPattern);
+            var checkResult = false;
+
+            $.ajax({
+                async   : false,
+                url     : options.checkToDeleteURL,
+                dataType: 'json',
+                type    : 'POST',
+                data    : { 'tagId' : tagId},
+                complete: function (XMLHttpRequest, textStatus) {
+
+                    // Expected JSON Object: { "success": Boolean, "allowDelete": Boolean}
+                    result = $.parseJSON(XMLHttpRequest.responseText);
+                    if(result.success === true){
+                        checkResult = result.allowDelete;
+                    }
+                }
+            });
+
+            return checkResult;
+        }
 
 		/**
 		* Marks a single Tag as deleted.
