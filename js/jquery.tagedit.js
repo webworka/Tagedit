@@ -52,7 +52,6 @@
 		options = $.extend(true, {
 			// default options here
 			autocompleteURL: null,
-            checkToDeleteURL: null,
 			deletedPostfix: '-d',
 			addedPostfix: '-a',
 			additionalListClass: '',
@@ -77,7 +76,8 @@
 				deletedElementTitle: 'This Element will be deleted.',
 				breakEditLinkTitle: 'Cancel',
                 forceDeleteConfirmation: 'There are more records using this tag, are you sure do you want to remove it?'
-			}
+			},
+			tabindex: false
 		}, options || {});
 
 		// no action if there are no elements
@@ -169,9 +169,9 @@
 							var checkAutocomplete = oldValue == true? false : true;
 							// check if the Value ist new
 							var isNewResult = isNew($(this).val(), checkAutocomplete);
-							if(isNewResult[0] === true || (isNewResult[0] === false && typeof isNewResult[1] == 'string')) {
+							if(isNewResult[0] === true || isNewResult[1] != null) {
 
-								if(oldValue == false && typeof isNewResult[1] == 'string') {
+								if(oldValue == false && isNewResult[1] != null) {
 									oldValue = true;
 									id = isNewResult[1];
 								}
@@ -312,7 +312,7 @@
 				}
 
 				textfield.remove();
-				$(this).find('a.tagedit-save, a.tagedit-break, a.tagedit-delete').remove(); // Workaround. This normaly has to be done by autogrow Plugin
+				$(this).find('a.tagedit-save, a.tagedit-break, a.tagedit-delete, tester').remove(); // Workaround. This normaly has to be done by autogrow Plugin
 				$(this).removeClass('tagedit-listelement-edit').unbind('finishEdit');
 				return false;
 			});
@@ -347,16 +347,7 @@
 					.click(function() {
                         window.clearTimeout(closeTimer);
 						if(confirm(options.texts.deleteConfirmation)) {
-                            var canDelete = checkToDelete($(this).parent());
-                            if (!canDelete && confirm(options.texts.forceDeleteConfirmation)) {
-                                markAsDeleted($(this).parent());
-                            }
-
-                            if(canDelete) {
-                                markAsDeleted($(this).parent());
-                            }
-
-                            $(this).parent().find(':text').trigger('finishEdit', [true]);
+							markAsDeleted($(this).parent());
 						}
                         else {
                             $(this).parent().find(':text').trigger('finishEdit', [true]);
@@ -489,6 +480,9 @@
                 
 				// If there is an entry for that already in the autocomplete, don't use it (Check could be case sensitive or not)
 				for (var i = 0; i < result.length; i++) {
+					var label = typeof result[i] == 'string' ? result[i] : result[i].label;
+					if (options.checkNewEntriesCaseSensitive == false)
+						label = label.toLowerCase();
                     var resultValue = result[i].label? result[i].label : result[i];
                     var label = options.checkNewEntriesCaseSensitive == true? resultValue : resultValue.toLowerCase();
 					if (label == compareValue) {
