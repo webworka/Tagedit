@@ -7,7 +7,6 @@ http://www.youtube.com/watch?v=TU_FdBlSPNc
 https://github.com/webworka/Tagedit
   
 Copyright (c) 2010 Oliver Albrecht <info@webwork-albrecht.de>
-Copyright (c) 2012 Thomas Brüderli <thomas@roundcube.net>
  
 This work is licensed under a MIT License
 http://www.opensource.org/licenses/mit-license.php
@@ -15,17 +14,12 @@ http://www.opensource.org/licenses/mit-license.php
  
 Author:
 Oliver Albrecht - Mail: info@webwork-albrecht.de Twitter: @webworka
-Thomas Brüderli
 
 Version:
-1.2.2 (07/2012)
+1.2.1 (11/2011)
 
 
 ------ Changelog ---------
-
-v1.2.2 - 13.07.2012
-- Handle tabindex, either by option or copy from source element (issue #31)
-- Fixed isNew() check when autocomplete source is a local array
 
 v1.2.1 - 05.11.2011
 - Bugfix: When editing a tag, there was no check on the existing values (issue #15)
